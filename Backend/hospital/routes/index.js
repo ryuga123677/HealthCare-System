@@ -16,15 +16,30 @@ router.post("/register",function(req,res,next){
     fullname:req.body.fullname,
   })
   userModel.register(userdata,req.body.password).then(function(registereduser){
-    passport.authenticate("local")(req,res,function(){})
+    passport.authenticate("local")(req,res,function(){
+      res.send('registered');
+    })
   })
   });
-  router.post("/login",passport.authenticate("local",{
-    successRedirect:"/profile",
-    failureRedirect:"/login",
-    failureFlash:true,
-  }),function(req,res){
+  router.post("/login",(req,res,next)=>{
+    const {email,password}=req.body;
+    userModel.findOne({email:email}).then(
+      user=>{
+        if(user){
+          if(user.password ===password)
+          {
+            res.json("success")
+          }
+          else{
+            res.json("failure")
+          }
+        }
+        else{
+          res.json("no record")
+        }
+      }
+    )
+  })
   
-  });
 
 module.exports = router;

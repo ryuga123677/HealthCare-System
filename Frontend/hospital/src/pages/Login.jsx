@@ -2,27 +2,27 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-export const Login = (props) => {
+export const Login = () => {
 
   const [email,setemail] = useState('');
   const [password,setpassword] = useState('');
   const navigate = useNavigate();
-  const handleSignup = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/login', {
-        
-        email,
-      
-    
-        password,
+  const handleLogin = async () => {
+   
+     await axios.post('http://localhost:3000/login', {email,password,
+      }).then(result=>{
+        console.log(result.data);
+        if(result.data ==="success")
+        {
+            navigate('/main');
+        }
+        else
+        {
+            navigate('/login')
+        }
       });
-
-      navigate('/main');
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error during register:', error.message);
-    }
-  };
+  }
+  
   return (
     <>
     
@@ -35,12 +35,13 @@ export const Login = (props) => {
 </div>
     <div>
     <label>Password</label>
-    <input type="password" className="password" placeholder="Password" value={password}
-          onChange={(e) => setpassword(e.target.value)}/>
+    <input type="password" className="password" placeholder="Password" value={password} onChange={(e) => setpassword(e.target.value)}/>
     </div>
    
-    </form>
-    <button id="btn" onClick={handleSignup}>Submit</button>
+   </form>
+  
+    <button id="btn" onClick={handleLogin}>Submit</button>
+    
     
     </>
   )

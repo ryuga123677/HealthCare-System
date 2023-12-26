@@ -50,7 +50,7 @@ export const Signup = (props) => {
     
     </form>
     <button id="btn" onClick={handleSignup}>Submit</button>
-    
+    <button  onClick={()=>navigate('main')}>Submit2</button>
     </>
   )
 }
