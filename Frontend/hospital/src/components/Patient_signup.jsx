@@ -6,19 +6,23 @@ export const Patient_signup = (props) => {
   const [username,setusername] = useState('');
   const [email,setemail] = useState('');
   const [password,setpassword] = useState('');
-  const [fullname,setfullname] = useState('');
+  const [age,setage] = useState(0);
+  const [hospitalname,sethospitalname] = useState('');
   const navigate = useNavigate();
   const handleSignup = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/register', {
+      const response = await axios.post('http://localhost:3000/patientregister', {
         username,
         email,
-      
-        fullname,
+      age,
+        hospitalname,
         password,
       });
-
+      if(response.data==="success")
       navigate('/main');
+    else{
+      navigate('/patientregister');
+    }
       console.log(response.data);
     } catch (error) {
       console.error('Error during register:', error.message);
@@ -43,9 +47,14 @@ export const Patient_signup = (props) => {
           onChange={(e) => setpassword(e.target.value)}/>
     </div>
     <div>
-    <label>fullname</label>
-    <input type="text" className="fullname" placeholder="Full name" value={fullname}
-          onChange={(e) => setfullname(e.target.value)}/>
+    <label>age</label>
+    <input type="number" className="password" placeholder="age" value={age}
+          onChange={(e) => setage(e.target.value)}/>
+    </div>
+    <div>
+    <label>hospitalname</label>
+    <input type="text" className="fullname" placeholder="hospital name" value={hospitalname}
+          onChange={(e) => sethospitalname(e.target.value)}/>
     </div>
     
     </form>

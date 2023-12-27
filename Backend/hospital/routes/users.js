@@ -1,21 +1,42 @@
 const mongoose = require('mongoose');
 const plm= require("passport-local-mongoose");
-const Doctor= require('./routes/doctors');
-const Patient= require('./routes/patients');
- mongoose.connect("mongodb://127.0.0.1:27017/Hospital-Database-2");
+mongoose.connect("mongodb://127.0.0.1:27017/Hospital-Database")
 
-const ownerSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-  doctor: [
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+  },
+  hospitalname: {
+    type: String,
+    required: true,
+  },
+  
+  doctors: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Doctor',
     },
   ],
-  patient:[ { type: mongoose.Schema.Types.ObjectId, ref: 'Patient' }],
+  patients: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Patient',
+    },
+  ],
+
+
 });
-ownerSchema.plugin(plm);
-const Owner = mongoose.model('Owner', ownerSchema);
-module.exports =Owner;
+userSchema.plugin(plm);
+const Owner = mongoose.model('Owner', userSchema);
+
+module.exports = Owner;
