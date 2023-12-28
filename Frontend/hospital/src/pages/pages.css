@@ -1,0 +1,18 @@
+.btn{
+    background-color: aquamarine;
+    color: black;
+    padding: auto;
+    margin: 50px 50px;
+}
+.info{
+    display: flex;
+    flex-direction: column;
+padding: 10%;
+    justify-content: center;
+    align-items: center;
+
+}
+.head
+{
+    color: rgb(37, 86, 3);
+}

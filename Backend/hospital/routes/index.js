@@ -6,7 +6,7 @@ const localStrategy=require("passport-local");
 const Doctor = require('./doctors');
 const Patient = require('./patients');
 passport.use(new localStrategy(Owner.authenticate()));
-
+passport.use('doctor', new localStrategy(Doctor.authenticate()));
 
 
 /* GET home page. */
@@ -53,6 +53,26 @@ router.post("/ownerregister",function(req,res,next){
     res.send("success");
   
   });
+ router.post("/doctorlogin",(req,res,next)=>{
+    const {username,password}=req.body;
+    Doctor.findOne({username:username}).then(
+      user=>{
+        if(user){
+          if(user.password ===password)
+          {
+            res.json("success")
+          }
+          else{
+            res.json("failure")
+          }
+        }
+        else{
+          res.json("no record")
+        }
+      }
+    )
+  })
+  
   router.post('/patientregister',async function(req, res, next) {
 
     const user=await Owner.findOne({hospitalname:req.body.hospitalname});
@@ -68,7 +88,26 @@ router.post("/ownerregister",function(req,res,next){
     res.send("success");
   
   });
- 
+  router.post("/patientlogin",(req,res,next)=>{
+    const {username,password}=req.body;
+    Doctor.findOne({username:username}).then(
+      user=>{
+        if(user){
+          if(user.password ===password)
+          {
+            res.json("success")
+          }
+          else{
+            res.json("failure")
+          }
+        }
+        else{
+          res.json("no record")
+        }
+      }
+    )
+  })
+  
   //   router.post("/patientregister",function(req,res,next){
   //     DynamicModel.findOne({ hospitalname: req.body.hospitalname }).then(owner=>{
   //       const userdata=new Patient({

@@ -9,6 +9,16 @@ const doctorSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref:'Owner'
     },
+    patienttreated:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Patient'
+      }
+    ],
+    currentlytreating:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Patient'
+    }],
   
   });
   doctorSchema.plugin(plm);

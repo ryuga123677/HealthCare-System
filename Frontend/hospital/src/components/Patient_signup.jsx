@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import './pages.css'
 export const Patient_signup = (props) => {
   const [username,setusername] = useState('');
   const [email,setemail] = useState('');
@@ -19,7 +20,7 @@ export const Patient_signup = (props) => {
         password,
       });
       if(response.data==="success")
-      navigate('/main');
+      navigate('/patientpage');
     else{
       navigate('/patientregister');
     }
@@ -29,37 +30,40 @@ export const Patient_signup = (props) => {
     }
   };
   return (
-    <>
-    
+    <><div className="head2"><h1>Welcome, Register yourself here</h1></div>
+    <div className="card">
     <form>
-      <div>
-      <label>Username</label>
-    <input type="text" className="username" placeholder="Username" value={username} onChange={(e) => setusername(e.target.value)}/>
+      <div className="inp">
+      <label>Name-</label>
+    <input type="text" placeholder="Username" value={username} onChange={(e) => setusername(e.target.value)}/>
       </div>
      
-<div>
-<label>Email</label>
-<input type="email" className="email" placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
+<div className="inp">
+<label>Email-</label>
+<input type="email"  placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
 </div>
-    <div>
-    <label>Password</label>
-    <input type="password" className="password" placeholder="Password" value={password}
+    <div className="inp">
+    <label>Password-</label>
+    <input type="password"  placeholder="Password" value={password}
           onChange={(e) => setpassword(e.target.value)}/>
     </div>
-    <div>
-    <label>age</label>
-    <input type="number" className="password" placeholder="age" value={age}
+    <div className="inp">
+    <label>Age-</label>
+    <input type="number"  placeholder="age" value={age}
           onChange={(e) => setage(e.target.value)}/>
     </div>
-    <div>
-    <label>hospitalname</label>
-    <input type="text" className="fullname" placeholder="hospital name" value={hospitalname}
+    <div className="inp">
+    <label>HospitalName-</label>
+    <input type="text"  placeholder="Hospital-name" value={hospitalname}
           onChange={(e) => sethospitalname(e.target.value)}/>
     </div>
     
     </form>
-    <button id="btn" onClick={handleSignup}>Submit</button>
-    <button  onClick={()=>navigate('main')}>Submit2</button>
+    <button className="btn" onClick={handleSignup}>Submit</button>
+
+    </div>
+ 
+    
     </>
   )
 }

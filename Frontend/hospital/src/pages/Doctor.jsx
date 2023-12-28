@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 export const Doctor = () => {
   return (
     <><div>Patent treated</div>

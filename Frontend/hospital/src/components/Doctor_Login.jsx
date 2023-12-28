@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './pages.css'
-export const Owner_Login = (props) => {
+export const Doctor_Login = (props) => {
   const [username,setname] = useState('');
 
   const [password,setpassword] = useState('');
@@ -11,19 +11,19 @@ export const Owner_Login = (props) => {
   const navigate = useNavigate();
   const handleSignup = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/ownerlogin', {
+      const response = await axios.post('http://localhost:3000/doctorlogin', {
         username,
         password,
     
       });
         if(response.data==="success")
         {
-          navigate('/ownerpage');
+          navigate('/doctorpage');
 
         }
         else
         {
-          navigate('/ownerlogin');
+          navigate('/doctorlogin');
         }
       
       console.log(response.data);
@@ -32,17 +32,17 @@ export const Owner_Login = (props) => {
     }
   };
   return (
-    <> <div className="head2"><h1>Welcome, Login yourself here</h1></div>
+    <><div className="head2"><h1>Welcome, Doctor Login yourself here</h1></div>
     <div className="card">
     <form>
       <div className="inp">
       <label>Name</label>
-    <input type="text"  placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
+    <input type="text" className="name" placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
       </div>
      
     <div className="inp">
     <label>Password</label>
-    <input type="password"  placeholder="Password" value={password}
+    <input type="password" className="password" placeholder="Password" value={password}
           onChange={(e) => setpassword(e.target.value)}/>
     </div>
 
@@ -50,7 +50,7 @@ export const Owner_Login = (props) => {
     </form>
     <button className="btn" onClick={handleSignup}>Submit</button>
     </div>
-    
+ 
     
     </>
   )
