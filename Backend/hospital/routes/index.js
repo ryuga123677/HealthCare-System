@@ -35,7 +35,7 @@ router.post("/ownerregister",function(req,res,next){
   
     failureFlash:true,
   }),function(req,res){
-    res.json("succes");
+    res.json("success");
   
   });
   router.post('/doctorregister',async function(req, res, next) {
@@ -71,7 +71,15 @@ router.post("/ownerregister",function(req,res,next){
         }
       }
     )
-  })
+  });
+  router.get("/doctorlist",async (req,res,next)=>{
+    const hospitalname=req.query.search;
+  const user= await Owner.findOne({hospitalname:hospitalname}).populate("doctors");
+
+      res.send(user.doctors);
+      console.log(user.doctors);
+    
+  });
   
   router.post('/patientregister',async function(req, res, next) {
 
@@ -90,23 +98,31 @@ router.post("/ownerregister",function(req,res,next){
   });
   router.post("/patientlogin",(req,res,next)=>{
     const {username,password}=req.body;
-    Doctor.findOne({username:username}).then(
+    Patient.findOne({username:username}).then(
       user=>{
         if(user){
           if(user.password ===password)
           {
-            res.json("success")
+            res.json(
+              "success",
+      
+            )
           }
           else{
-            res.json("failure")
+            res.json(
+              "failure",
+             )
           }
         }
         else{
-          res.json("no record")
+          res.json(
+            "no record",
+        
+          )
         }
       }
     )
-  })
+  });
   
   //   router.post("/patientregister",function(req,res,next){
   //     DynamicModel.findOne({ hospitalname: req.body.hospitalname }).then(owner=>{

@@ -13,6 +13,7 @@ import {Owner_Login} from './components/Owner_Login'
 import { Doctor_Login } from './components/Doctor_Login'
 import {Patient_Login} from './components/Patient_Login'
 import { Navbar } from './components/Navbar'
+import { Doctor_List } from './components/Doctor_List'
  
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
       <Route path='doctorpage'  element={<Doctor/>}/>
       <Route path='patientpage'  element={<Patient/>}/>
       <Route path='ownerpage'  element={<Owner/>}/>
+      <Route path='doctorlist'  element={<Doctor_List />}/>
    
     </Routes>
     </>
