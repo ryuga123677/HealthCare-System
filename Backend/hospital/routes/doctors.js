@@ -1,14 +1,20 @@
 const mongoose = require('mongoose');
 const plm= require("passport-local-mongoose");
 const doctorSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-    specialty: String,
-    hospitalname:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref:'Owner'
+    username: {type:String},
+    
+    password: {
+      type: String,
     },
+    email: {type:String},
+    specialty: {type:String},
+    hospitalname:{
+      type:String
+    },
+    appointments:[{
+      type: mongoose.Schema.Types.ObjectId,
+        ref:'Patient'
+    }],
     patienttreated:[
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,6 +25,7 @@ const doctorSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref:'Patient'
     }],
+
   
   });
   doctorSchema.plugin(plm);

@@ -14,6 +14,7 @@ import { Doctor_Login } from './components/Doctor_Login'
 import {Patient_Login} from './components/Patient_Login'
 import { Navbar } from './components/Navbar'
 import { Doctor_List } from './components/Doctor_List'
+import { Doctor_appointment } from './pages/Doctor_appointment'
  
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
       <Route path='patientpage'  element={<Patient/>}/>
       <Route path='ownerpage'  element={<Owner/>}/>
       <Route path='doctorlist'  element={<Doctor_List />}/>
+      <Route path='patientappoints'  element={<Doctor_appointment />}/>
    
     </Routes>
     </>

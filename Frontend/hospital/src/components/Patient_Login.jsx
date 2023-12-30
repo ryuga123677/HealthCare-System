@@ -20,7 +20,9 @@ export const Patient_Login = (props) => {
       });
         if(response.data==="success")
         {
-          localStorage.setItem('hospitalname',hospitalname)
+          localStorage.setItem('hospitalname',hospitalname);
+          localStorage.setItem('patientname',username);
+          
           navigate('/patientpage');
           
 

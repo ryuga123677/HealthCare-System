@@ -21,7 +21,7 @@
 
 }
 .card{
-    background-color:rgb(180, 252, 228);
+    background-color:aquamarine(180, 252, 228);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,6 +33,11 @@
     margin-top: 5%;
     padding: 2%;
     border-radius: 15%;
+    
+    backdrop-filter: blur(10px);
+ 
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     
     
 }

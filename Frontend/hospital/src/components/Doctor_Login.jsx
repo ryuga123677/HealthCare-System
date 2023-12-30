@@ -7,6 +7,7 @@ export const Doctor_Login = (props) => {
   const [username,setname] = useState('');
 
   const [password,setpassword] = useState('');
+  
  
   const navigate = useNavigate();
   const handleSignup = async () => {
@@ -17,7 +18,7 @@ export const Doctor_Login = (props) => {
     
       });
         if(response.data==="success")
-        {
+        {const doctorname=localStorage.setItem('doctorname',username);
           navigate('/doctorpage');
 
         }

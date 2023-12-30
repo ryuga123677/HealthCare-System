@@ -1,9 +1,12 @@
 import React from 'react'
 
-
+import { useNavigate } from 'react-router-dom'
 export const Doctor = () => {
+const navigate = useNavigate();
   return (
-    <><div>Patent treated</div>
+    <>
+    <button className='btn' onClick={()=>navigate('/patientappoints')}>Appointments</button>
+    <div>Patent treated</div>
       <div>
         <div>Currently treating</div>
       

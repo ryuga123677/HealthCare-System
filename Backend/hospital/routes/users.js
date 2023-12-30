@@ -8,14 +8,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  password: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
     unique: true,
   },
-  password: {
-    type: String,
-  },
+ 
   hospitalname: {
     type: String,
     required: true,

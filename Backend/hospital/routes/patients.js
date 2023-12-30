@@ -3,13 +3,13 @@ const plm= require("passport-local-mongoose");
 
 // Define the user schema
 const patientSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-  age: Number,
+  username: {type:String},
+  password: {type:String},
+  email: {type:String},
+ 
+  age: {type:Number},
   hospitalname:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Owner'
+    type:String,
   },
   doctortreating:[{
     type: mongoose.Schema.Types.ObjectId,

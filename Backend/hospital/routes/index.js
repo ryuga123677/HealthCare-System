@@ -5,8 +5,9 @@ const passport= require('passport');
 const localStrategy=require("passport-local");
 const Doctor = require('./doctors');
 const Patient = require('./patients');
-passport.use(new localStrategy(Owner.authenticate()));
-passport.use('doctor', new localStrategy(Doctor.authenticate()));
+passport.use('owner-local',new localStrategy(Owner.authenticate()));
+passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
+passport.use('patient-local', new localStrategy(Patient.authenticate()));
 
 
 /* GET home page. */
@@ -24,106 +25,119 @@ router.post("/ownerregister",function(req,res,next){
   })
   
   Owner.register(ownerdata,req.body.password).then(function(registereduser){
-    passport.authenticate("local")(req,res,function(){
+    passport.authenticate("owner-local")(req,res,function(){
       console.log(res.json);
       res.send("success");
     })
   })
 
   });
-  router.post("/ownerlogin",passport.authenticate("local",{
+  router.post("/ownerlogin",passport.authenticate("owner-local",{
   
     failureFlash:true,
   }),function(req,res){
     res.json("success");
   
   });
+
   router.post('/doctorregister',async function(req, res, next) {
 
     const user=await Owner.findOne({hospitalname:req.body.hospitalname});
-   const  doct= await Doctor.create({
+   const  doct= new Doctor({
     username: req.body.username,
     email: req.body.email,
-    password: req.body.password,
+    
     specialty: req.body.specialty,
-      hospitalname:user._id
+      hospitalname:user.hospitalname,
     });
+    Doctor.register(doct,req.body.password,).then(function(registered) {    passport.authenticate("doctor-local")(req,res,function(){
+      // console.log(res.json);
+      res.send("success");
+    })
+
+    })
     user.doctors.push(doct._id);
     await user.save();
-    res.send("success");
+    // res.send("success");
   
   });
- router.post("/doctorlogin",(req,res,next)=>{
-    const {username,password}=req.body;
-    Doctor.findOne({username:username}).then(
-      user=>{
-        if(user){
-          if(user.password ===password)
-          {
-            res.json("success")
-          }
-          else{
-            res.json("failure")
-          }
-        }
-        else{
-          res.json("no record")
-        }
-      }
-    )
+  router.post("/doctorlogin",passport.authenticate("doctor-local",{
+  
+    failureFlash:true,
+  }),function(req,res){
+    res.json("success");
+  
   });
+
   router.get("/doctorlist",async (req,res,next)=>{
     const hospitalname=req.query.search;
   const user= await Owner.findOne({hospitalname:hospitalname}).populate("doctors");
 
       res.send(user.doctors);
-      console.log(user.doctors);
+      console.log(user);
+    
     
   });
+  
+  router.get("/appointment",async (req,res,next)=>{
+    const patient=await Patient.findOne({username:req.query.param2});
+  const doctor=await Doctor.findOne({username:req.query.param1});
+
+  doctor.appointments.push(patient._id);
+  await doctor.save();
+  res.send("success");
+  });
+  router.post("/appointmentfix",async (req,res,next)=>{
+    const doctor=await Doctor.findOne({username:req.query.doctorname});
+    const patient=await Patient.findOne({username:req.query.patientname});
+    doctor.currentlytreating.push(patients._id);
+    await doctor.save();
+    res.send("success");
+  })
+
+  router.get("/patientappoints",async(req,res,next)=>{
+    const patient=await Doctor.findOne({username:req.query.param}).populate("appointments");
+    
+    res.send(patient.appointments);
+    console.log(patient.appointments);
+    
+  })
   
   router.post('/patientregister',async function(req, res, next) {
 
     const user=await Owner.findOne({hospitalname:req.body.hospitalname});
-   const  pet= await Patient.create({
+   const  pet= new Patient({
     username: req.body.username,
     email: req.body.email,
-    password: req.body.password,
+    hospitalname:user.hospitalname,
+    
     age: req.body.age,
-      hospitalname:user._id
+
+    });
+    Patient.register(pet,req.body.password).then(function(registered) {
+      passport.authenticate("patient-local")(req,res,function(){
+        
+        res.send("success");
+      })
+  
     });
     user.patients.push(pet._id);
     await user.save();
-    res.send("success");
+    
   
   });
-  router.post("/patientlogin",(req,res,next)=>{
-    const {username,password}=req.body;
-    Patient.findOne({username:username}).then(
-      user=>{
-        if(user){
-          if(user.password ===password)
-          {
-            res.json(
-              "success",
-      
-            )
-          }
-          else{
-            res.json(
-              "failure",
-             )
-          }
-        }
-        else{
-          res.json(
-            "no record",
-        
-          )
-        }
-      }
-    )
-  });
+  router.post("/patientlogin",passport.authenticate("patient-local",{
   
+    failureFlash:true,
+  }),function(req,res){
+    res.json("success");
+  
+  });
+ 
+  
+
+module.exports = router;
+
   //   router.post("/patientregister",function(req,res,next){
   //     DynamicModel.findOne({ hospitalname: req.body.hospitalname }).then(owner=>{
   //       const userdata=new Patient({
@@ -158,6 +172,37 @@ router.post("/ownerregister",function(req,res,next){
   //     }
   //   )
   // })
-  
+  //  router.post("/doctorlogin",(req,res,next)=>{
+//     const {username,password}=req.body;
+//     Doctor.findOne({username:username}).then(
+//       user=>{
+//         if(user){
+//           if(user.password ===password)
+//           {
+//             res.json("success")
+//           }
+//           else{
+//             res.json("failure")
+//           }
+//         }
+//         else{
+//           res.json("no record")
+//         }
+//       }
+//     )
+//   });
+  // router.post('/doctorregister',async function(req, res, next) {
 
-module.exports = router;
+  //   const user=await Owner.findOne({hospitalname:req.body.hospitalname});
+  //  const  doct= await Doctor.create({
+  //   username: req.body.username,
+  //   email: req.body.email,
+  //   password: req.body.password,
+  //   specialty: req.body.specialty,
+  //     hospitalname:user._id
+  //   });
+  //   user.doctors.push(doct._id);
+  //   await user.save();
+  //   res.send("success");
+  
+  // });
