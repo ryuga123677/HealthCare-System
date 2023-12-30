@@ -1,8 +1,10 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import axios from 'axios';
+import { SpinnerDotted } from 'spinners-react';
 
 export const Doctor_List = () => {
+  
     
     const [names,setname] = useState([]);
     const patientname=localStorage.getItem('patientname',"****");
@@ -15,6 +17,7 @@ export const Doctor_List = () => {
           console.log(response.data);
           let arr=response.data;
           setLoading(false);
+
         
           setname(arr);
         
@@ -39,7 +42,7 @@ export const Doctor_List = () => {
       },[])
   return (<>
     <div>Doctor_List</div>
-    {loading?(<p>Loading...</p>):(
+    {loading?(<SpinnerDotted />):(
         <ol>
         {names.map((item,index) => (
           

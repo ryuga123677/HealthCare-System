@@ -88,9 +88,18 @@ router.post("/ownerregister",function(req,res,next){
   res.send("success");
   });
   router.post("/appointmentfix",async (req,res,next)=>{
+    const doctor=await Doctor.findOne({username:req.body.username});
+    const patient=await Patient.findOne({username:req.body.patientname});
+    doctor.currentlytreating.push(patient._id);
+    await doctor.save();
+    patient.doctortreating.push(doctor._id);
+    await patient.save();
+    res.send("success");
+  });
+  router.get("/appointmentdecline",async(req,res,next)=>{
     const doctor=await Doctor.findOne({username:req.query.doctorname});
     const patient=await Patient.findOne({username:req.query.patientname});
-    doctor.currentlytreating.push(patients._id);
+    doctor.appointments.splice(patient._id, 1);
     await doctor.save();
     res.send("success");
   })
