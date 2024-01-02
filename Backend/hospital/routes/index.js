@@ -5,6 +5,7 @@ const passport= require('passport');
 const localStrategy=require("passport-local");
 const Doctor = require('./doctors');
 const Patient = require('./patients');
+const Report = require('./reports');
 passport.use('owner-local',new localStrategy(Owner.authenticate()));
 passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
@@ -79,6 +80,16 @@ router.post("/ownerregister",function(req,res,next){
     
   });
   
+  router.get("/doctorspatient",async (req,res,next)=>{
+    const doctorname=req.query.search;
+  const doct= await Doctor.findOne({username:doctorname}).populate("currentlytreating");
+
+      res.send(doct.currentlytreating);
+    
+    
+    
+  });
+  
   router.get("/appointment",async (req,res,next)=>{
     const patient=await Patient.findOne({username:req.query.param2});
   const doctor=await Doctor.findOne({username:req.query.param1});
@@ -94,6 +105,9 @@ router.post("/ownerregister",function(req,res,next){
     await doctor.save();
     patient.doctortreating.push(doctor._id);
     await patient.save();
+   
+    doctor.appointments.splice(patient._id, 1);
+    await doctor.save();
     res.send("success");
   });
   router.get("/appointmentdecline",async(req,res,next)=>{
@@ -102,8 +116,76 @@ router.post("/ownerregister",function(req,res,next){
     doctor.appointments.splice(patient._id, 1);
     await doctor.save();
     res.send("success");
-  })
+  });
+  router.post("/assignreport",async(req,res,next)=>{
+    
+    const doctors=await Doctor.findOne({username:req.body.doctorname});
 
+    const patient=await Patient.findOne({username:req.body.username});
+    const report=await Report.create({username:req.body.username,
+      disease:req.body.disease ,
+      symptoms: req.body.symptoms,
+      medicines:req.body.medicines,
+      diet:req.body.diet,
+      doctor:doctors._id,
+      patient:patient._id,
+
+    });
+    doctors.patientreports.push(report._id);
+    await doctors.save();
+    patient.report=report._id;
+    await patient.save();
+ 
+    
+   
+    
+    res.send("success");
+  });
+  router.get("/patienttreated",async(req,res,next)=>{
+    const doctor=await Doctor.findOne({username:req.query.search}).populate("patienttreated");
+  
+    {
+    res.send(doctor.patienttreated);
+    }
+    
+    
+  });
+router.post("/treated",async(req,res,next)=>{
+  const doctor=await Doctor.findOne({username:req.body.doctorname});
+  const patient=await Patient.findOne({username:req.body.patientname});
+  doctor.patienttreated.push(patient._id);
+  doctor.currentlytreating.splice(patient._id, 1);
+  await doctor.save();
+
+
+});
+router.post("/nottreated",async(req,res,next)=>{
+  const doctor=await Doctor.findOne({username:req.body.doctorname});
+  const patient=await Patient.findOne({username:req.body.patientname});
+  doctor.died.push(patient._id);
+  doctor.currentlytreating.splice(patient._id, 1);
+  await doctor.save();
+  
+
+});
+router.get("/performance",async(req,res,next)=>{
+  const doctor=await Doctor.findOne({username:req.query.search});
+  const life=doctor.patienttreated.length;
+  const death= doctor.died.length;
+  if(death==0)
+  {let x=((life*100)).toString();
+    console.log(x);
+    res.send(x);
+  }
+  else{
+    let x=(((life/death)*100)).toString();
+    console.log(x);
+    res.send(x);
+  }
+
+  
+
+});
   router.get("/patientappoints",async(req,res,next)=>{
     const patient=await Doctor.findOne({username:req.query.param}).populate("appointments");
     
@@ -142,7 +224,13 @@ router.post("/ownerregister",function(req,res,next){
     res.json("success");
   
   });
- 
+  router.get("/seereports",async(req,res,next)=>{
+    const patient=await Patient.findOne({username:req.query.name}).populate("report");
+    
+    res.send(patient.report);
+  
+    
+  })
   
 
 module.exports = router;

@@ -45,20 +45,26 @@ const response=await axios.get(`http://localhost:3000/patientappoints?param=${us
    },[]);
   return (
     <>
-    <div>Doctor_appointment</div>
+    <div><h1 className='head2'>Appointments requests</h1></div>
 
     {loading ? (
-        <SpinnerDotted />
+        <SpinnerDotted className='loading'/>
       ) : (
-        <ol>
+        <div className='content'>
+          <div className='card'>
+          <ol>
           {names.map((item, index) => (
-            <li key={index}>
-                <div>{item.username}</div>
+            <li key={index} className='inrow'>
+                <h2>{item.username}</h2>
                 <button className='btn' onClick={()=>Accept(item.username)}>Accept</button>
                 <button className='btn' onClick={()=>Decline(item.username)}>Decline</button>
             </li>
           ))}
         </ol>
+          </div>
+        
+        </div>
+       
       )}
     </>
     

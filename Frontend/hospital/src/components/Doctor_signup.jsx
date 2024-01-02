@@ -21,7 +21,7 @@ export const Doctor_signup = (props) => {
         hospitalname,
       });
       if(response.data==="success")
-      navigate('/doctorpage');
+      navigate('/doctorlogin');
     else{
       navigate('/doctorregister')
     }

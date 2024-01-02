@@ -15,6 +15,12 @@ const doctorSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
         ref:'Patient'
     }],
+    died:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Patient'
+      }
+    ],
     patienttreated:[
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,6 +30,10 @@ const doctorSchema = new mongoose.Schema({
     currentlytreating:[{
       type: mongoose.Schema.Types.ObjectId,
       ref:'Patient'
+    }],
+    patientreports:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Report'
     }],
 
   

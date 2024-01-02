@@ -15,7 +15,11 @@ import {Patient_Login} from './components/Patient_Login'
 import { Navbar } from './components/Navbar'
 import { Doctor_List } from './components/Doctor_List'
 import { Doctor_appointment } from './pages/Doctor_appointment'
- 
+import { Assign_Report } from './pages/Assign_Report'
+import { CurrentlyTreating } from './pages/CurrentlyTreating'
+import { SeeReports } from './pages/SeeReports'
+import { Patient_Treated } from './pages/Patient_Treated'
+ import { Performance } from './pages/Performance'
 
 function App() {
 
@@ -38,6 +42,11 @@ function App() {
       <Route path='ownerpage'  element={<Owner/>}/>
       <Route path='doctorlist'  element={<Doctor_List />}/>
       <Route path='patientappoints'  element={<Doctor_appointment />}/>
+      <Route path='currentlytreating'  element={<CurrentlyTreating />}/>
+      <Route path='assignreport/:username'  element={<Assign_Report />}/>
+      <Route path='seereports'  element={<SeeReports/>}/>
+      <Route path='patienttreated'  element={<Patient_Treated />}/>
+      <Route path='performance'  element={<Performance />}/>
    
     </Routes>
     </>

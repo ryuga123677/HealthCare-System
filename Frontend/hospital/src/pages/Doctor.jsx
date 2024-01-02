@@ -5,17 +5,28 @@ export const Doctor = () => {
 const navigate = useNavigate();
   return (
     <>
-    <button className='btn' onClick={()=>navigate('/patientappoints')}>Appointments</button>
-    <div>Patent treated</div>
+    <h1 className='head2'>Doctors Page</h1>
+    <div className='content'>
+      <div className='card'>
+
+      <button className='btn' onClick={()=>navigate('/patientappoints')}>Appointments</button>
+    <div>
+    <button className='btn' onClick={()=>navigate('/patienttreated')}>Patient Treated</button>
+    </div>
+   
       <div>
-        <div>Currently treating</div>
+        <button className='btn' onClick={()=>navigate('/currentlytreating')}>Currently Treating</button>
       
-        <div>reports</div>
-        <div>medicine</div>
+       
 
       </div>
-      <div>kaun theek hua</div>
-      <div>performance</div>
+      
+      <div> <button className='btn' onClick={()=>navigate('/performance')}>Performance</button></div>
+      </div>
+
+  
+    </div>
+   
 
     </>
   )

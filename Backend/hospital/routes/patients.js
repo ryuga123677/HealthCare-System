@@ -15,15 +15,10 @@ const patientSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref:'Doctor'
   }],
-  reports:[
-    {
-      diseasename: String,
-      mediciense:[],
-      diet:[],
-
-
-    }
-  ]
+  report:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:'Report'}
+  
 });
 patientSchema.plugin(plm);
 // Create models for Patient, Doctor, and Owner

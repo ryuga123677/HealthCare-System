@@ -70,3 +70,20 @@ margin:5% auto;
     display: flex;
     justify-content: center;
 }
+.loading{
+    display: flex;
+    margin:0 auto;
+    padding-top:15%;
+    align-items: center;
+    justify-items: center;
+
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.inrow{
+    display: flex;
+}

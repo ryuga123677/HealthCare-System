@@ -2,9 +2,10 @@ import React from 'react'
 import { useState,useEffect } from 'react';
 import axios from 'axios';
 import { SpinnerDotted } from 'spinners-react';
+import { useNavigate } from 'react-router-dom';
 
 export const Doctor_List = () => {
-  
+  const navigate=useNavigate();
     
     const [names,setname] = useState([]);
     const patientname=localStorage.getItem('patientname',"****");
@@ -41,15 +42,21 @@ export const Doctor_List = () => {
         handleSignup();
       },[])
   return (<>
-    <div>Doctor_List</div>
-    {loading?(<SpinnerDotted />):(
-        <ol>
+    <h1 className='head2'>Doctors Avaliable</h1>
+    {loading?(<SpinnerDotted className='loading'/>):(
+      <div >
+        <div className='card'>
+        <ol className='content'>
         {names.map((item,index) => (
           
           <li key={index }>
-            <button className="btn" onClick={()=>assignappoint(item.username)}>{item.username} click to fix appointment</button></li>
+            <button className="btn" onClick={()=>{assignappoint(item.username),navigate(-1)}}>
+              <h2>{item.username}</h2> click to request for appointment</button></li>
         ))}
       </ol>
+        </div>
+      </div>
+     
     )
 
     }

@@ -20,7 +20,7 @@ export const Patient_signup = (props) => {
         password,
       });
       if(response.data==="success")
-      navigate('/patientpage');
+      navigate('/patientlogin');
     else{
       navigate('/patientregister');
     }
