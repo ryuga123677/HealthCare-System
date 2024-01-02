@@ -20,7 +20,9 @@ import { CurrentlyTreating } from './pages/CurrentlyTreating'
 import { SeeReports } from './pages/SeeReports'
 import { Patient_Treated } from './pages/Patient_Treated'
  import { Performance } from './pages/Performance'
-
+import { Died } from './pages/Died'
+import { About } from './pages/About'
+import { Contact } from './pages/Contact'
 function App() {
 
 
@@ -33,7 +35,7 @@ function App() {
       <Route path='ownerregister' element ={<Owner_Signup/>}/>
       <Route path='patientregister' element ={<Patient_signup/>}/>
       <Route path='doctorregister' element ={<Doctor_signup/>}/>
-      {/* <Route path='main'  element={<Main/>}/> */}
+      { <Route path='about'  element={<About/>}/> }
       <Route path='ownerlogin'  element={<Owner_Login/>}/>
       <Route path='doctorlogin'  element={<Doctor_Login/>}/>
       <Route path='patientlogin'  element={<Patient_Login/>}/>
@@ -47,6 +49,8 @@ function App() {
       <Route path='seereports'  element={<SeeReports/>}/>
       <Route path='patienttreated'  element={<Patient_Treated />}/>
       <Route path='performance'  element={<Performance />}/>
+      <Route path='died'  element={<Died />}/>
+      <Route path='contact'  element={<Contact />}/>
    
     </Routes>
     </>

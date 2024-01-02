@@ -190,9 +190,17 @@ router.get("/performance",async(req,res,next)=>{
     const patient=await Doctor.findOne({username:req.query.param}).populate("appointments");
     
     res.send(patient.appointments);
-    console.log(patient.appointments);
+    
+    
+  });
+  router.get("/died",async(req,res,next)=>{
+    const patient=await Doctor.findOne({username:req.query.search}).populate("died");
+    
+    res.send(patient.died);
+  
     
   })
+  
   
   router.post('/patientregister',async function(req, res, next) {
 

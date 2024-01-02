@@ -20,6 +20,12 @@ const navigate = useNavigate();
        
 
       </div>
+      <div>
+        <button className='btn' onClick={()=>navigate('/died')}>Patient Died</button>
+      
+       
+
+      </div>
       
       <div> <button className='btn' onClick={()=>navigate('/performance')}>Performance</button></div>
       </div>
