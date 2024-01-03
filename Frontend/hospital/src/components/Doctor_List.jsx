@@ -51,7 +51,10 @@ export const Doctor_List = () => {
           
           <li key={index }>
             <button className="btn" onClick={()=>{assignappoint(item.username),navigate(-1)}}>
-              <h2>{item.username}</h2> click to request for appointment</button></li>
+              <h2>{item.username}</h2> click to request for appointment</button>
+              <button onClick={()=>navigate(`/chat/${item.username}`)}>Chat with doctor</button>
+              </li>
+              
         ))}
       </ol>
         </div>

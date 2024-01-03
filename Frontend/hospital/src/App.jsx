@@ -23,6 +23,7 @@ import { Patient_Treated } from './pages/Patient_Treated'
 import { Died } from './pages/Died'
 import { About } from './pages/About'
 import { Contact } from './pages/Contact'
+import ChatView from './pages/ChatView'
 function App() {
 
 
@@ -51,6 +52,7 @@ function App() {
       <Route path='performance'  element={<Performance />}/>
       <Route path='died'  element={<Died />}/>
       <Route path='contact'  element={<Contact />}/>
+      <Route path='chat/:name'  element={<ChatView />}/>
    
     </Routes>
     </>

@@ -6,9 +6,30 @@ const localStrategy=require("passport-local");
 const Doctor = require('./doctors');
 const Patient = require('./patients');
 const Report = require('./reports');
+const Chat = require('./chat');
 passport.use('owner-local',new localStrategy(Owner.authenticate()));
 passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
+const io=require('socket.io')(4000,{
+
+  cors:{
+    origin:['http://localhost:5173']
+  }
+});
+io.on('connection',socket =>{
+  console.log(socket.id);
+  socket.on("send-message",async (message)=>{
+    console.log(message);
+    const {sendername,receivername,message}=message;
+    const chat=new Chat({sendername,receivername,message});
+    await chat.save();
+    
+    
+
+    // io.emit('receive-message',message)
+    socket.broadcast.emit('receive-message',message)
+  })
+})
 
 
 /* GET home page. */
@@ -238,8 +259,19 @@ router.get("/performance",async(req,res,next)=>{
     res.send(patient.report);
   
     
-  })
-  
+  });
+  router.get("/message",async(req,res,next)=>{
+    const me=await Chat.find({
+      sendername:req.query.sendername,
+      receivername:req.query.receivername,
+    }).sort({timestamp:1});
+    const you=await Chat.find({
+      sendername:req.query.receivername,
+      receivername:req.query.sendername,
+    }).sort({timestamp:1});
+    res.send({"me":me,
+  "you":you});
+  });
 
 module.exports = router;
 
