@@ -16,6 +16,9 @@ export const Patient = () => {
     <div>
         <button className="btn" onClick={()=>{navigate('/doctorlist')}}>Doctors Avaliable</button>
     </div>
+    <div>
+        <button className="btn" onClick={()=>{navigate('/doctortreating')}}>Doctor Treating me</button>
+    </div>
    
     <div><button className='btn' onClick={()=>navigate('/seereports')}>Present Reports</button></div>
     </div>

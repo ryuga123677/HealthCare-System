@@ -24,6 +24,7 @@ import { Died } from './pages/Died'
 import { About } from './pages/About'
 import { Contact } from './pages/Contact'
 import ChatView from './pages/ChatView'
+import { DoctorTreating } from './pages/DoctorTreating'
 function App() {
 
 
@@ -53,6 +54,7 @@ function App() {
       <Route path='died'  element={<Died />}/>
       <Route path='contact'  element={<Contact />}/>
       <Route path='chat/:name'  element={<ChatView />}/>
+      <Route path='doctortreating'  element={<DoctorTreating />}/>
    
     </Routes>
     </>

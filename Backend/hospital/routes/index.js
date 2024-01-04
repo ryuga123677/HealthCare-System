@@ -18,16 +18,33 @@ const io=require('socket.io')(4000,{
 });
 io.on('connection',socket =>{
   console.log(socket.id);
-  socket.on("send-message",async (message)=>{
-    console.log(message);
-    const {sendername,receivername,message}=message;
+  socket.on('loadHistory', async ({ sendername, receivername }) => {
+    try {
+      const me = await Chat.find({ sendername, receivername }).sort({ timestamp: 1 });
+      const you = await Chat.find({ sendername: receivername, receivername: sendername }).sort({ timestamp: 1 });
+      const arr=[me,you];
+      // console.log(me);
+      // console.log(you);
+      console.log(arr);
+      socket.emit('history',arr);
+      
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+    }
+  });
+  socket.on("send-message",async (messag)=>{
+    console.log(messag);
+    const {sendername,receivername,message}=messag;
     const chat=new Chat({sendername,receivername,message});
     await chat.save();
     
     
 
     // io.emit('receive-message',message)
-    socket.broadcast.emit('receive-message',message)
+    io.emit('receive-message',messag);
+    socket.on('disconnect', () => {
+      console.log('User disconnected');
+    });
   })
 })
 
@@ -69,7 +86,7 @@ router.post("/ownerregister",function(req,res,next){
     username: req.body.username,
     email: req.body.email,
     
-    specialty: req.body.specialty,
+    speciality: req.body.speciality,
       hospitalname:user.hospitalname,
     });
     Doctor.register(doct,req.body.password,).then(function(registered) {    passport.authenticate("doctor-local")(req,res,function(){
@@ -138,6 +155,13 @@ router.post("/ownerregister",function(req,res,next){
     await doctor.save();
     res.send("success");
   });
+  router.get("/doctortreating",async(req,res,next)=>{
+
+    const patient=await Patient.findOne({username:req.query.search}).populate("doctortreating");
+    
+
+    res.send(patient.doctortreating);
+  });
   router.post("/assignreport",async(req,res,next)=>{
     
     const doctors=await Doctor.findOne({username:req.body.doctorname});
@@ -176,7 +200,10 @@ router.post("/treated",async(req,res,next)=>{
   const patient=await Patient.findOne({username:req.body.patientname});
   doctor.patienttreated.push(patient._id);
   doctor.currentlytreating.splice(patient._id, 1);
+  patient.doctortreating.splice(doctor._id, 1);
+
   await doctor.save();
+  await patient.save();
 
 
 });

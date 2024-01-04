@@ -1,65 +1,84 @@
 import {io} from 'socket.io-client'
 import React, { useState ,useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-// import MessageList from './MessageList';
-// import MessageInput from './MessageInput';
 const socket=io("http://localhost:4000");
 
 
 const ChatView = () => {
-    const {doctorname}=useParams();
+    const {name}=useParams();
+    console.log(name);
     const patientname=localStorage.getItem('patientname',"****");
+    const doctname=localStorage.getItem('doctorname',"****");
+    var tempname;
+    if(name==patientname)
+    {
+      tempname=doctname;
+    }
+    else{
+      tempname=patientname;
+    }
     
-  const [messages, setMessages] = useState([
-  ]);
-  const [messagesobject, setMessagesobject] = useState({});
+  const [messages, setMessages] = useState([]);
+  const [newmessage, setnewMessage] = useState('');
 socket.on("connect",()=>{
     console.log("u connected with",socket.id);
 });
-socket.on("receive-message",data=>{
-    setMessages(data.message);
-});
-  const addMessage = (newMessage) => {
-    setMessages([...messages, newMessage]);
+// socket.on("receive-message",message=>{
+//   setMessages((prevMessages) => ({
+//     me: prevMessages.me,
+//     you: [...prevMessages.you, message]
+//   }));
+// });
+
+  const addMessage = () => {
+  
     socket.emit("send-message",{
-    sendername:patientname,
-    receivername:doctorname,
-    message:newMessage,
+    sendername:tempname,
+    receivername:name,
+    message:newmessage,
 
 });
     
   };
-  const handleChat = async () => {
-  
-    const response = await axios.get(`http://localhost:3000/message?sendername=${patientname}&receivername=${doctorname}`).then((response) => {
-      console.log(response.data);
-      let arr=response.data;
-      setLoading(false);
 
-    
-      setMessagesobject(arr);
-    
-
-    }).catch((error) => { 
-      setLoading(false);
-    });
-  }
   useEffect(() => {
-    handleChat();
-  },[]);
+    socket.emit('loadHistory', { sendername: tempname, receivername: name });
+
+    socket.on('history', (arr) => {
+      setMessages(arr);
+    });
+
+    // Listen for new messages
+    socket.on('receive-message', (messages) => {
+      
+      setMessages((prevMessages) => ({
+        
+        ...prevMessages,message:[...prevMessages.message, messages]
+      }));
+  })
+  
+},[]);
 
   return (
-    <div className="chat-container">
-         <ol className='content'>
-        {messagesobject.map((item,index) => (
-          
-          <li key={index }>
-              <h2>{item.me.message}</h2> </li>
-        ))}
-      </ol>
-      <div>{messages}</div>
-      <input type="text" value={messages} onChange={(e) => setMessages(e.target.value)}/>
-      <button className='btn' onClick={()=>addMessage(messages)}>send</button>
+    <div>
+      <h2>Chat History</h2>
+      <div>
+      
+        <ul>
+          {messages.message?.map((item, index) => (
+            <li key={index}>{item.message}</li>
+          ))}
+        </ul>
+      </div>
+    
+      <div>
+        <input
+          type="text"
+          value={newmessage}
+          onChange={(e) => setnewMessage(e.target.value)}
+        />
+        <button onClick={addMessage}>Send</button>
+      </div>
     </div>
   );
 };

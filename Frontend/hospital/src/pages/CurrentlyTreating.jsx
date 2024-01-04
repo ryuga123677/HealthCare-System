@@ -85,6 +85,7 @@ export const CurrentlyTreating = () => {
             <button className="btn" onClick={()=>assignreport(item.username)}><h2>{item.username}</h2> Tap to assign report</button>
             <button className='btn' onClick={()=>Treated(item.username)}>Treated</button>
             <button className='btn' onClick={()=>notTreated(item.username)}>Not Treated</button>
+            <button className='btn' onClick={()=>navigate( `/chat/${item.username}`)}>Chat with Patient</button>
             </li>
         ))}
       </ol>

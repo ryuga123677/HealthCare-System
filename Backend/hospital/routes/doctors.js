@@ -7,7 +7,7 @@ const doctorSchema = new mongoose.Schema({
       type: String,
     },
     email: {type:String},
-    specialty: {type:String},
+    speciality: {type:String},
     hospitalname:{
       type:String
     },
