@@ -24,8 +24,7 @@ io.on('connection',socket =>{
       const you = await Chat.find({ sendername: receivername, receivername: sendername }).sort({ timestamp: 1 });
       let arr=[...me,...you];
       arr.sort((a,b)=>a.timestamp-b.timestamp);
-      // console.log(me);
-      // console.log(you);
+  
       console.log(arr);
       socket.emit('history',arr);
       

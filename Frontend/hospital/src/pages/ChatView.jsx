@@ -85,7 +85,7 @@ return () => {
               (
             <div className="message-blue">
                 <p className="message-content">{item.message}</p>
-                <div className="message-timestamp-left">{item.receivername}</div>
+                <div className="message-timestamp-left">{item.sendername}</div>
             </div>):
             <div className="message-orange">
             <p className="message-content">{item.message}</p>
