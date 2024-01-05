@@ -1,12 +1,15 @@
 import {io} from 'socket.io-client'
 import React, { useState ,useEffect} from 'react';
 import { useParams } from 'react-router-dom';
+import { SpinnerDotted } from 'spinners-react';
 const socket=io("http://localhost:4000");
 
 
 const ChatView = () => {
     const {name}=useParams();
-    console.log(name);
+    const[fisttime,setfirsttime]=useState();
+    const [loading, setLoading] = useState(true);
+    
     const patientname=localStorage.getItem('patientname',"****");
     const doctname=localStorage.getItem('doctorname',"****");
     var tempname;
@@ -20,15 +23,9 @@ const ChatView = () => {
     
   const [messages, setMessages] = useState([]);
   const [newmessage, setnewMessage] = useState('');
-socket.on("connect",()=>{
-    console.log("u connected with",socket.id);
-});
-// socket.on("receive-message",message=>{
-//   setMessages((prevMessages) => ({
-//     me: prevMessages.me,
-//     you: [...prevMessages.you, message]
-//   }));
-// });
+  socket.on("connect",()=>{
+    
+  });
 
   const addMessage = () => {
   
@@ -40,44 +37,79 @@ socket.on("connect",()=>{
 });
     
   };
-
+ 
   useEffect(() => {
+
+
     socket.emit('loadHistory', { sendername: tempname, receivername: name });
 
     socket.on('history', (arr) => {
-      setMessages(arr);
-    });
-
-    // Listen for new messages
-    socket.on('receive-message', (messages) => {
       
-      setMessages((prevMessages) => ({
-        
-        ...prevMessages,message:[...prevMessages.message, messages]
-      }));
-  })
+      
+      setMessages(arr);
+      setLoading(false);
+    });
+    console.log("1 use");
+    return () => {
+      socket.off('history');
+    };
+  
+  
+   
   
 },[]);
-
+useEffect(() =>{
+  socket.on('receive-message', (data) => {
+      
+    setMessages((prevMessages) => [
+      
+      ...prevMessages,data
+    ]);
+    console.log("2 use");
+});
+return () => {
+  socket.off('receive-message');
+};
+},[]);
   return (
     <div>
-      <h2>Chat History</h2>
+      <h2 className='head2'>Chat Page</h2>
+      {loading?(<SpinnerDotted/>):(
       <div>
       
-        <ul>
-          {messages.message?.map((item, index) => (
-            <li key={index}>{item.message}</li>
+      
+          {messages.map((item, index) => (
+             <div id='index' className='container'>
+             {item.receivername===tempname? 
+
+              (
+            <div className="message-blue">
+                <p className="message-content">{item.message}</p>
+                <div className="message-timestamp-left">{item.receivername}</div>
+            </div>):
+            <div className="message-orange">
+            <p className="message-content">{item.message}</p>
+            <div className="message-timestamp-right">{item.sendername}</div>
+        
+            </div>
+}
+             </div>
+            
           ))}
-        </ul>
+        
       </div>
+      )
+}
     
-      <div>
+    
+      <div className='input'>
         <input
+          className='inbox'
           type="text"
           value={newmessage}
           onChange={(e) => setnewMessage(e.target.value)}
         />
-        <button onClick={addMessage}>Send</button>
+        <button onClick={addMessage} className='btn'>Send</button>
       </div>
     </div>
   );

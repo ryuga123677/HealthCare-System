@@ -20,9 +20,10 @@ io.on('connection',socket =>{
   console.log(socket.id);
   socket.on('loadHistory', async ({ sendername, receivername }) => {
     try {
-      const me = await Chat.find({ sendername, receivername }).sort({ timestamp: 1 });
+      const me = await Chat.find({ sendername:sendername, receivername:receivername }).sort({ timestamp: 1 });
       const you = await Chat.find({ sendername: receivername, receivername: sendername }).sort({ timestamp: 1 });
-      const arr=[me,you];
+      let arr=[...me,...you];
+      arr.sort((a,b)=>a.timestamp-b.timestamp);
       // console.log(me);
       // console.log(you);
       console.log(arr);
