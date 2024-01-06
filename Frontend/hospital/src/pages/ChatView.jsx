@@ -73,7 +73,7 @@ return () => {
 },[]);
   return (
     <div>
-      <h2 className='head2'>Chat Page</h2>
+      <h2 className='head2'>Chat Page-{name}</h2>
       {loading?(<SpinnerDotted/>):(
       <div>
       

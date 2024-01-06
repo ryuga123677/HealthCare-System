@@ -2,6 +2,6 @@ import React from 'react'
 
 export const Owner = () => {
   return (
-    <div>Owner</div>
+    <h2 className='head2'>Hospital owner</h2>
   )
 }

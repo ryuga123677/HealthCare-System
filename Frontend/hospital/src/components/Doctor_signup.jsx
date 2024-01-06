@@ -33,35 +33,37 @@ export const Doctor_signup = (props) => {
   return (
     <><div className="head2"><h1>Welcome, Doctor Register yourself here</h1></div>
     <div className="card">
+    <div className="content">
     <form>
-      <div className="inp">
-      <label>Name</label>
-    <input type="text" className="username" placeholder="Username" value={username} onChange={(e) => setusername(e.target.value)}/>
-      </div>
+      
+      <label>Enter Name</label>
+    <input type="text" className="inp" placeholder="Username" value={username} onChange={(e) => setusername(e.target.value)}/>
+      
      
-<div className="inp">
-<label>Email</label>
-<input type="email"  placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
-</div>
-    <div className="inp">
-    <label>Password</label>
-    <input type="password"  placeholder="Password" value={password}
+
+<label>Enter Email</label>
+<input type="email" className="inp" placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
+
+  
+    <label>Enter Password</label>
+    <input type="password" className="inp"  placeholder="Password" value={password}
           onChange={(e) => setpassword(e.target.value)}/>
-    </div>
-    <div className="inp">
-    <label>Speciality</label>
-    <input type="text"  placeholder="Speciality" value={speciality}
+  
+
+    <label>Enter Speciality</label>
+    <input type="text" className="inp" placeholder="Speciality" value={speciality}
           onChange={(e) => setspeciality(e.target.value)}/>
-    </div>
-    <div className="inp">
-    <label> HospitalName</label>
-    <input type="text" placeholder="Hospital-name" value={hospitalname}
+    
+
+    <label>Enter HospitalName</label>
+    <input type="text" className="inp" placeholder="Hospital-name" value={hospitalname}
           onChange={(e) => sethospitalname(e.target.value)}/>
-    </div>
     
     </form>
     <button className="btn" onClick={handleSignup}>Submit</button>
     </div>
+    </div>
+   
     
    
     

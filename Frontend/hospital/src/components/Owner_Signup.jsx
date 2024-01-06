@@ -38,28 +38,28 @@ export const Owner_Signup = (props) => {
     <div className="card">
     <form>
 
-      <div className="inp">
+      
       <label>Name-</label>
-    <input type="text"  placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
-      </div>
+    <input type="text" className="inp" placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
+      
      
-<div className="inp">
+
 <label>Email-</label>
-<input type="email"  placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
-</div>
-    <div className="inp">
+<input type="email" className="inp" placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
+
+    
     <label>Password-</label>
-    <input type="password"  placeholder="Password" value={password}
+    <input type="password" className="inp" placeholder="Password" value={password}
           onChange={(e) => setpassword(e.target.value)}/>
-    </div>
-    <div className="inp">
+  
+  
     <label>HospitalName-</label>
-    <input type="text"  placeholder="Hospital-Name" value={hospitalname}
+    <input type="text" className="inp" placeholder="Hospital-Name" value={hospitalname}
           onChange={(e) => sethospitalname(e.target.value)}/>
-    </div>
+
     
     </form>
-    <button className="btn2" onClick={handleSignup}>Submit</button>
+    <button className="btn" onClick={handleSignup}>Submit</button>
     </div>
 
     

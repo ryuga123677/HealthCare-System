@@ -3,10 +3,12 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './pages.css'
+import { useAuth } from "./AuthProvider";
 export const Doctor_Login = (props) => {
   const [username,setname] = useState('');
 
   const [password,setpassword] = useState('');
+  const auth=useAuth();
   
  
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ export const Doctor_Login = (props) => {
       });
         if(response.data==="success")
         {const doctorname=localStorage.setItem('doctorname',username);
+        // auth.login(doctorname);
           navigate('/doctorpage');
 
         }
@@ -36,16 +39,16 @@ export const Doctor_Login = (props) => {
     <><div className="head2"><h1>Welcome, Doctor Login yourself here</h1></div>
     <div className="card">
     <form>
-      <div className="inp">
+    
       <label>Name</label>
-    <input type="text" className="name" placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
-      </div>
+    <input type="text" className="inp" placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
+      
      
-    <div className="inp">
+
     <label>Password</label>
-    <input type="password" className="password" placeholder="Password" value={password}
+    <input type="password" className="inp" placeholder="Password" value={password}
           onChange={(e) => setpassword(e.target.value)}/>
-    </div>
+
 
     
     </form>

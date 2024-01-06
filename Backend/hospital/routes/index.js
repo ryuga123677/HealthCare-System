@@ -204,7 +204,7 @@ router.post("/treated",async(req,res,next)=>{
 
   await doctor.save();
   await patient.save();
-
+res.send("success");
 
 });
 router.post("/nottreated",async(req,res,next)=>{
@@ -213,7 +213,7 @@ router.post("/nottreated",async(req,res,next)=>{
   doctor.died.push(patient._id);
   doctor.currentlytreating.splice(patient._id, 1);
   await doctor.save();
-  
+  res.send("success");
 
 });
 router.get("/performance",async(req,res,next)=>{

@@ -45,14 +45,18 @@ export const Doctor_List = () => {
     <h1 className='head2'>Doctors Avaliable</h1>
     {loading?(<SpinnerDotted className='loading'/>):(
       <div >
-        <div className='card'>
+        <div >
         <ol className='content'>
         {names.map((item,index) => (
           
           <li key={index }>
-            <button className="btn" onClick={()=>{assignappoint(item.username),navigate(-1)}}>
-              <h2>{item.username}</h2> click to request for appointment</button>
-              <button onClick={()=>navigate(`/chat/${item.username}`)}>Chat with doctor</button>
+            <div className='inrow'>
+            <button className="btn4" onClick={()=>{assignappoint(item.username),navigate(-1)}}>
+
+              <h2 >{item.username}</h2> click to request for appointment</button>
+              
+            </div>
+
               </li>
               
         ))}

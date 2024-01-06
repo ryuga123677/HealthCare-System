@@ -25,12 +25,15 @@ import { About } from './pages/About'
 import { Contact } from './pages/Contact'
 import ChatView from './pages/ChatView'
 import { DoctorTreating } from './pages/DoctorTreating'
+// import { RequireAuth } from './components/RequireAuth'
+// import {AuthProvider} from './components/AuthProvider'
 function App() {
 
 
 
   return (
     <>
+    {/* <AuthProvider> */}
     <Navbar />
         <Routes>
           <Route path='/' element={<Main_Signp_page/>} />
@@ -57,6 +60,7 @@ function App() {
       <Route path='doctortreating'  element={<DoctorTreating />}/>
    
     </Routes>
+    {/* </AuthProvider> */}
     </>
   )
 }

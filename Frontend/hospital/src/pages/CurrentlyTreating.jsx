@@ -43,9 +43,10 @@ export const CurrentlyTreating = () => {
           
             
             setLoading(false);
-  
+            if(response.data==="success")
+            {
             setname(names.filter(user => user.username !==patientname));
-          
+            }
           
     
           }).catch((error) => { 
@@ -62,8 +63,11 @@ export const CurrentlyTreating = () => {
             let arr=response.data;
             setLoading(false);
   
-          
+            if(response.data==="success")
+            {
             setname(names.filter(user => user.username !==patientname));
+            }
+          
           
     
           }).catch((error) => { 
@@ -77,15 +81,19 @@ export const CurrentlyTreating = () => {
   <>
     <h1 className='head2'>Currently Treating</h1>
     {loading?(<SpinnerDotted className='loading'/>):(
-      <div className='card'>
+      <div className='box'>
             <ol className='content'>
         {names.map((item,index) => (
           
           <li key={index } className='inrow'>
+          
+            <div>
             <button className="btn" onClick={()=>assignreport(item.username)}><h2>{item.username}</h2> Tap to assign report</button>
-            <button className='btn' onClick={()=>Treated(item.username)}>Treated</button>
-            <button className='btn' onClick={()=>notTreated(item.username)}>Not Treated</button>
+            <button className='btn2' onClick={()=>Treated(item.username)}>Treated</button>
+            <button className='btn2' onClick={()=>notTreated(item.username)}>Not Treated</button>
             <button className='btn' onClick={()=>navigate( `/chat/${item.username}`)}>Chat with Patient</button>
+            </div>
+           
             </li>
         ))}
       </ol>

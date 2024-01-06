@@ -13,7 +13,7 @@ export const Main_Signp_page = () => {
     </div>
   <div>
   <button className="btn" onClick={()=>navigate('/ownerregister')}>Register your Hospital here</button>
-  <button className="btn" onClick={()=>navigate('/doctorregister')}>Click for Hospital join</button>
+  <button className="btn" onClick={()=>navigate('/doctorregister')}>Click for Doctor Signup</button>
   <button className="btn" onClick={()=>navigate('/patientregister')}>Click for Patient Signup</button>
 
   </div>

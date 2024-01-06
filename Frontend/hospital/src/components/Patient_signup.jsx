@@ -33,30 +33,27 @@ export const Patient_signup = (props) => {
     <><div className="head2"><h1>Welcome, Register yourself here</h1></div>
     <div className="card">
     <form>
-      <div className="inp">
+      
       <label>Name-</label>
-    <input type="text" placeholder="Username" value={username} onChange={(e) => setusername(e.target.value)}/>
-      </div>
+    <input type="text" className="inp" placeholder="Username" value={username} onChange={(e) => setusername(e.target.value)}/>
+    
      
-<div className="inp">
 <label>Email-</label>
-<input type="email"  placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
-</div>
-    <div className="inp">
+<input type="email" className="inp" placeholder="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
+
+    
     <label>Password-</label>
-    <input type="password"  placeholder="Password" value={password}
+    <input type="password" className="inp" placeholder="Password" value={password}
           onChange={(e) => setpassword(e.target.value)}/>
-    </div>
-    <div className="inp">
+    
     <label>Age-</label>
-    <input type="number"  placeholder="age" value={age}
+    <input type="number" className="inp" placeholder="age" value={age}
           onChange={(e) => setage(e.target.value)}/>
-    </div>
-    <div className="inp">
+  
+  
     <label>HospitalName-</label>
-    <input type="text"  placeholder="Hospital-name" value={hospitalname}
+    <input type="text" className="inp" placeholder="Hospital-name" value={hospitalname}
           onChange={(e) => sethospitalname(e.target.value)}/>
-    </div>
     
     </form>
     <button className="btn" onClick={handleSignup}>Submit</button>

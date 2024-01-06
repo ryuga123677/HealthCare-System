@@ -31,10 +31,10 @@ export const Assign_Report = () => {
     <div className='card'>
     <div className='content'>
     <div>Patient Name- {username}</div>
-    <div>Disease Name-<input type='text' value={disease} onChange={(e) => setdisease(e.target.value)}></input></div>
-    <div>Symptoms-<input type='text' value={symptoms} onChange={(e) => setsymptoms(e.target.value)}></input></div>
-    <div>Medicines-<input type='text' value={medicines} onChange={(e) => setmedicines(e.target.value)}></input></div>
-    <div>Diet-<input type='text'value={diet} onChange={(e) => setdiet(e.target.value)}></input></div>
+    <div>Disease Name-<input type='text' className='inp' value={disease} onChange={(e) => setdisease(e.target.value)}></input></div>
+    <div>Symptoms-<input type='text' className='inp' value={symptoms} onChange={(e) => setsymptoms(e.target.value)}></input></div>
+    <div>Medicines-<input type='text' className='inp' value={medicines} onChange={(e) => setmedicines(e.target.value)}></input></div>
+    <div>Diet-<input type='text' className='inp' value={diet} onChange={(e) => setdiet(e.target.value)}></input></div>
     <button className='btn' onClick={()=>assignreport(username)}>Assign Report</button>
     </div>
     </div>

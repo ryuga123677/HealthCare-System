@@ -42,21 +42,19 @@ export const Patient_Login = (props) => {
     <><div className="head2"><h1>Welcome, Login yourself here</h1></div>
     <div className="card">
     <form>
-      <div className="inp">
+    
       <label>Name</label>
-    <input type="text" placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
-      </div>
-     
-    <div  className="inp">
+    <input type="text" className="inp" placeholder="Name" value={username} onChange={(e) => setname(e.target.value)}/>
+      
+ 
     <label>Password</label>
-    <input type="password" placeholder="Password" value={password}
+    <input type="password" className="inp" placeholder="Password" value={password}
           onChange={(e) => setpassword(e.target.value)}/>
-    </div>
-    <div  className="inp">
+   
     <label>Hospitalname</label>
-    <input type="text" placeholder="Hospitalname" value={hospitalname}
+    <input type="text" className="inp" placeholder="Hospitalname" value={hospitalname}
           onChange={(e) => sethospitalname(e.target.value)}/>
-    </div>
+  
 
     
     </form>

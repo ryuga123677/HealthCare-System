@@ -1,9 +1,10 @@
 .btn{
-    background-color: aquamarine;
+    background-color: rgb(12, 43, 32);
     color: black;
     padding: auto;
     margin: 50px 50px;
 }
+
 .info{
     display: flex;
     flex-direction: column;

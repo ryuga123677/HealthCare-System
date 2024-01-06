@@ -1,6 +1,9 @@
 .btn{
-    background-color: aquamarine;
+    background-color: #f8e896;
+ 
     color: black;
+    box-shadow: 2px 2px ;
+    
 
     /* padding: auto; */
     /* margin: 50px 50px; */
@@ -21,7 +24,9 @@
 
 }
 .card{
-    background-color:aquamarine(180, 252, 228);
+    background-color:rgb(140, 230, 212);
+    box-shadow: 10px 10px aquamarine;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,15 +47,17 @@
     
 }
 .inp{
-    width: 100%;
-
-    background-color:rgb(180, 252, 228);
+    width: 150%;
+    height:20%;
+    background-color:rgb(140, 251, 244);
     display: flex;
+    border-radius: 25px;
+
     /* align-items: center; */
 
     /* margin: 0 50%; */
     /* margin-left: 35%; */
-    border-radius: 5%;
+    
     /* height: 10%;
     width: 40%; */
      gap: 20%; 
@@ -59,11 +66,20 @@
     
 
 }
+.box{
+    
+    margin:20px 20px 20px 20px;
+    border-radius: 25px;
+}
 .btn2{
-    background-color: aquamarine;
+    background-color:rgb(140, 230, 212);
     color: black;
 width:150px;
-margin:5% auto;
+border: none;
+margin:10px 10px 10px 10px;
+}
+.btn2:hover{
+    color: rgb(53, 140, 233);
 }
 .head2{
     color: rgb(37, 86, 3);
@@ -83,7 +99,28 @@ margin:5% auto;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
 }
 .inrow{
     display: flex;
+
+}
+.btn3{
+    background-color: transparent;
+    border: none;
+    height: 10px;
+    padding-top: 0;
+
+}
+.btn3:hover{
+    color: rgb(42, 232, 249);
+}
+.btn4{
+    background-color: #f8e896;
+    color: black;
+    box-shadow: 2px 2px ;
+    margin:10px;
+
+    /* padding: auto; */
+    /* margin: 50px 50px; */
 }

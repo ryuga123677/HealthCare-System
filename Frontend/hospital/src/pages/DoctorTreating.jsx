@@ -36,8 +36,11 @@ export const DoctorTreating = () => {
         {names.map((item,index) => (
           
           <li key={index } className='inrow'>
-          {index+1}- {item.username}({item.speciality})
-          <button className='btn' onClick={()=>navigate(`/chat/${item.username}`)}>Chat with doctor</button>
+            <div className='inrow'>
+           <h2>{index+1}- {item.username}-({item.speciality})</h2> 
+          <button className='btn2' onClick={()=>navigate(`/chat/${item.username}`)}>Chat with doctor</button>
+            </div>
+      
             </li>
         ))}
       </ol>
