@@ -12,8 +12,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; */
 
-}
+font-family: cinz;
 
+}
+@font-face{
+  src: url(assets/fonts/CinzelDecorative-Regular.ttf);
+  font-family: cinz;
+}
 a {
   font-weight: 500;
   color: #033e12;
