@@ -78,6 +78,39 @@ router.post("/ownerregister",function(req,res,next){
     res.json("success");
   
   });
+  router.get("/doctorlistowner",async (req,res,next)=>{
+    const name=req.query.search;
+  const user= await Owner.findOne({username:name}).populate("doctors");
+
+      res.send(user.doctors);
+      console.log(user);
+    
+    
+  });
+  router.delete("/removedoctor",async (req,res,next)=>{
+
+  const doc= await Doctor.findOne({username:req.query.doctor});
+  const owner= await Owner.findOne({username:req.query.owner});
+
+  owner.doctors.splice(doc._id, 1);
+const deleteddoc=await Doctor.findOneAndDelete({username:req.query.doctor});
+if(deleteddoc)
+{
+  res.send("success");
+}
+else
+{
+  res.send("failure");
+}
+  
+
+
+  
+    
+    
+    
+  });
+
 
   router.post('/doctorregister',async function(req, res, next) {
 

@@ -17,7 +17,7 @@ export const Owner_Login = (props) => {
     
       });
         if(response.data==="success")
-        {
+        { const ownername=localStorage.setItem('ownername',username);
           navigate('/ownerpage');
 
         }
