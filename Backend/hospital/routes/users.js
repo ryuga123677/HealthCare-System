@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const plm= require("passport-local-mongoose");
+require('dotenv').config();
 mongoose.connect(process.env.DATABASE);//mongodb://127.0.0.1:27017/Hospital-Database
 
 const userSchema = new mongoose.Schema({
@@ -9,7 +10,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   password: {
-    type: String,
+    type: String
   },
   email: {
     type: String,
