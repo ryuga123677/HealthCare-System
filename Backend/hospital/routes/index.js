@@ -1,9 +1,9 @@
 var express = require('express');
-var app = express();
+// var app = express();
 var router = express.Router();
 const Owner=require("./users");
 const passport= require('passport');
-var http= require('http').createServer(app);
+// var http= require('http').createServer(app);
 const localStrategy=require("passport-local");
 const Doctor = require('./doctors');
 const Patient = require('./patients');
@@ -14,7 +14,7 @@ passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
 
 var BASE_URL=process.env.BASE_URL;
-const io=require('socket.io')(http,{
+const io=require('socket.io')(4000,{
 
   cors:{
     origin:['http://localhost:5173']
