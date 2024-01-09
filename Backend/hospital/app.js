@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 const cors=require('cors');
 var express = require('express');
+var app= express();
 const passport = require('passport');
 var path = require('path');
 var http= require('http').createServer(app);
