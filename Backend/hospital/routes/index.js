@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const Owner=require("./users");
 const passport= require('passport');
+
 const localStrategy=require("passport-local");
 const Doctor = require('./doctors');
 const Patient = require('./patients');
@@ -10,13 +11,9 @@ const Chat = require('./chat');
 passport.use('owner-local',new localStrategy(Owner.authenticate()));
 passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
-var BASE_URL=process.env.BASE_URL;
-const io=require('socket.io')(process.env.PORT,{
 
-  cors:{
-    origin:['http://localhost:5173']
-  }
-});
+var BASE_URL=process.env.BASE_URL;
+const io=require('socket.io');
 io.on('connection',socket =>{
   console.log(socket.id);
   socket.on('loadHistory', async ({ sendername, receivername }) => {
