@@ -4,16 +4,11 @@ var express = require('express');
 var app= express();
 const passport = require('passport');
 var path = require('path');
-var http= require('http').createServer(app);
+
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const expressSessions = require('express-session');
-const io=require('socket.io')(http,{
 
-  cors:{
-    origin:['http://localhost:5173']
-  }
-});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
