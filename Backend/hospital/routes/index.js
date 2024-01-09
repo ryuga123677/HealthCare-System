@@ -11,7 +11,7 @@ passport.use('owner-local',new localStrategy(Owner.authenticate()));
 passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
 var BASE_URL=process.env.BASE_URL;
-const io=require('socket.io')(4000,{
+const io=require('socket.io')(process.env.PORT,{
 
   cors:{
     origin:['http://localhost:5173']
