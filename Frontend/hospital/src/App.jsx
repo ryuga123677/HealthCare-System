@@ -25,6 +25,7 @@ import { About } from './pages/About'
 import { Contact } from './pages/Contact'
 import ChatView from './pages/ChatView'
 import { DoctorTreating } from './pages/DoctorTreating'
+import { Hospital } from './pages/Hospital'
 // import { RequireAuth } from './components/RequireAuth'
 // import {AuthProvider} from './components/AuthProvider'
 function App() {
@@ -55,6 +56,7 @@ function App() {
       <Route path='patienttreated'  element={<Patient_Treated />}/>
       <Route path='performance'  element={<Performance />}/>
       <Route path='died'  element={<Died />}/>
+      <Route path='hospitals'  element={<Hospital/>}/>
       <Route path='contact'  element={<Contact />}/>
       <Route path='chat/:name'  element={<ChatView />}/>
       <Route path='doctortreating'  element={<DoctorTreating />}/>

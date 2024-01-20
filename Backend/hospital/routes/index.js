@@ -1,9 +1,8 @@
 var express = require('express');
-// var app = express();
 var router = express.Router();
 const Owner=require("./users");
 const passport= require('passport');
-// var http= require('http').createServer(app);
+const upload=require("./multer");
 const localStrategy=require("passport-local");
 const Doctor = require('./doctors');
 const Patient = require('./patients');
@@ -14,11 +13,10 @@ passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
 
 var BASE_URL=process.env.BASE_URL;
-const io=require('socket.io')(4000,{
 
-  cors:{
-    origin:['http://localhost:5173']
-  }
+const io=require('socket.io')(4000,{
+  cors:{origin:['http://localhost:5173']
+}
 });
 io.on('connection',socket =>{
   console.log(socket.id);
@@ -55,21 +53,21 @@ io.on('connection',socket =>{
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send('hi');
+  res.send({message:'hi'});
 });
-router.post("/ownerregister",function(req,res,next){
- 
+router.post("/ownerregister",upload.single("file"),function(req,res,next){
+
   const ownerdata=new Owner({
     username: req.body.username,
     email: req.body.email,
     hospitalname: req.body.hospitalname,
-    
+    image:req.file.filename,
 
   })
   
   Owner.register(ownerdata,req.body.password).then(function(registereduser){
     passport.authenticate("owner-local")(req,res,function(){
-      console.log(res.json);
+      
       res.send("success");
     })
   })
@@ -79,14 +77,19 @@ router.post("/ownerregister",function(req,res,next){
   
     failureFlash:true,
   }),function(req,res){
-    res.json("success");
+    res.send("success");
   
   });
   router.get("/doctorlistowner",async (req,res,next)=>{
     const name=req.query.search;
   const user= await Owner.findOne({username:name}).populate("doctors");
-
+      if(!user)
+      {res.send("no doctors");
+      }
+      else
+      {
       res.send(user.doctors);
+      }
       console.log(user);
     
     
@@ -141,16 +144,16 @@ else
   
     failureFlash:true,
   }),function(req,res){
-    res.json("success");
+    res.send("success");
   
   });
 
   router.get("/doctorlist",async (req,res,next)=>{
     const hospitalname=req.query.search;
   const user= await Owner.findOne({hospitalname:hospitalname}).populate("doctors");
-
-      res.send(user.doctors);
-      console.log(user);
+const arr=user.doctors;
+      res.send(arr);
+      console.log(arr);
     
     
   });
@@ -314,7 +317,7 @@ router.get("/performance",async(req,res,next)=>{
   
     failureFlash:true,
   }),function(req,res){
-    res.json("success");
+    res.send("success");
   
   });
   router.get("/seereports",async(req,res,next)=>{
@@ -336,74 +339,11 @@ router.get("/performance",async(req,res,next)=>{
     res.send({"me":me,
   "you":you});
   });
+  router.get("/hospitals",async(req,res,next)=>{
+    const hosp=await Owner.find({});
+    res.send(hosp);
+  });
 
 module.exports = router;
 
-  //   router.post("/patientregister",function(req,res,next){
-  //     DynamicModel.findOne({ hospitalname: req.body.hospitalname }).then(owner=>{
-  //       const userdata=new Patient({
-  //         name:req.body.name,
-  //         email:req.body.email,
-  //         age:req.body.age,
-  //       })
-  //       Doctor.register(userdata,req.body.password).then(function(registereduser){
-  //         owner.patients=userdata;
-  //         passport.authenticate("local")(req,res,function(){res.send('success')})
-  //       })
-  //       });
-  //     })
-      
  
-  // router.post("/login",(req,res,next)=>{
-  //   const {email,password}=req.body;
-  //   userModel.findOne({email:email}).then(
-  //     user=>{
-  //       if(user){
-  //         if(user.password ===password)
-  //         {
-  //           res.json("success")
-  //         }
-  //         else{
-  //           res.json("failure")
-  //         }
-  //       }
-  //       else{
-  //         res.json("no record")
-  //       }
-  //     }
-  //   )
-  // })
-  //  router.post("/doctorlogin",(req,res,next)=>{
-//     const {username,password}=req.body;
-//     Doctor.findOne({username:username}).then(
-//       user=>{
-//         if(user){
-//           if(user.password ===password)
-//           {
-//             res.json("success")
-//           }
-//           else{
-//             res.json("failure")
-//           }
-//         }
-//         else{
-//           res.json("no record")
-//         }
-//       }
-//     )
-//   });
-  // router.post('/doctorregister',async function(req, res, next) {
-
-  //   const user=await Owner.findOne({hospitalname:req.body.hospitalname});
-  //  const  doct= await Doctor.create({
-  //   username: req.body.username,
-  //   email: req.body.email,
-  //   password: req.body.password,
-  //   specialty: req.body.specialty,
-  //     hospitalname:user._id
-  //   });
-  //   user.doctors.push(doct._id);
-  //   await user.save();
-  //   res.send("success");
-  
-  // });

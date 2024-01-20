@@ -13,7 +13,8 @@ export const Navbar = () => {
   return (
     <nav className='nav'>
 
-<Link to='/'>Home</Link>    
+<Link to='/'>Home</Link> 
+<Link to='/hospitals'>Hospitals</Link>     
 <Link to='/about'>About</Link>
 <Link to='/contact'>Contact us</Link>
 <button onClick={handlelogout} className='btn3'>Logout</button>
