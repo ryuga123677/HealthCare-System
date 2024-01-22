@@ -50,18 +50,22 @@ const response=await axios.get(`http://localhost:3000/patientappoints?param=${us
     {loading ? (
         <SpinnerDotted className='loading'/>
       ) : (
-        <div className='content'>
-          <div className='card'>
+        <div className='cont'>
+          
           <ol>
           {names.map((item, index) => (
-            <li key={index} className='inrow'>
-                <h2>{item.username}</h2>
+            <li key={index} >
+              <div className='inrow'>
+
+              <h2 className='txt'>{item.username}</h2>
                 <button className='btn' onClick={()=>Accept(item.username)}>Accept</button>
                 <button className='btn' onClick={()=>Decline(item.username)}>Decline</button>
+              </div>
+              
             </li>
           ))}
         </ol>
-          </div>
+          
         
         </div>
        

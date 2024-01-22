@@ -68,7 +68,7 @@ router.post("/ownerregister",upload.single("file"),function(req,res,next){
   Owner.register(ownerdata,req.body.password).then(function(registereduser){
     passport.authenticate("owner-local")(req,res,function(){
       
-      res.send("success");
+      res.status(200).send("success");
     })
   })
 

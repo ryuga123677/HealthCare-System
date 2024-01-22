@@ -40,7 +40,7 @@ export const Hospital = () => {
         <ol className='content'>
         {names.map((item,index) => (
           
-          <li key={index } className='card'>
+          <li key={index } className='card2'>
             <div>
           
               

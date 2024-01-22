@@ -32,7 +32,7 @@ export const DoctorTreating = () => {
         <div className='content'>
     {loading?(<SpinnerDotted className='loading'/>):(
       
-            <ol className='content'>
+            <ol className='cont'>
         {names.map((item,index) => (
           
           <li key={index } className='inrow'>

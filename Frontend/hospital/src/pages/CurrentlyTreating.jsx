@@ -82,7 +82,7 @@ export const CurrentlyTreating = () => {
     <h1 className='head2'>Currently Treating</h1>
     {loading?(<SpinnerDotted className='loading'/>):(
       <div className='box'>
-            <ol className='content'>
+            <ol className='cont'>
         {names.map((item,index) => (
           
           <li key={index } className='inrow'>
@@ -90,7 +90,7 @@ export const CurrentlyTreating = () => {
             <div>
             <button className="btn" onClick={()=>assignreport(item.username)}><h2>{item.username}</h2> Tap to assign report</button>
             <button className='btn2' onClick={()=>Treated(item.username)}>Treated</button>
-            <button className='btn2' onClick={()=>notTreated(item.username)}>Not Treated</button>
+            <button className='btn2' onClick={()=>notTreated(item.username)}>Not-Treated</button>
             <button className='btn' onClick={()=>navigate( `/chat/${item.username}`)}>Chat with Patient</button>
             </div>
            

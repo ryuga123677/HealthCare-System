@@ -29,7 +29,7 @@ export const Died = () => {
     <h1 className='head2'>Patient Died</h1>
     {loading?(<SpinnerDotted className='loading'/>):(
       <div >
-        <div className='card'>
+        <div className='cont'>
         <ol className='content'>
         {names.map((item,index) => (
           
