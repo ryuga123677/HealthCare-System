@@ -1,13 +1,18 @@
 var express = require('express');
 var router = express.Router();
-const Owner=require("./users");
+const app =require('../app.js');
+var debug = require('debug')('hospital:server');
+
+
+const Owner=require("../models/users");
 const passport= require('passport');
-const upload=require("./multer");
+const upload=require("../middleware/multer");
 const localStrategy=require("passport-local");
-const Doctor = require('./doctors');
-const Patient = require('./patients');
-const Report = require('./reports');
-const Chat = require('./chat');
+const Doctor = require('../models/doctors');
+const Patient = require('../models/patients');
+const Report = require('../models/reports');
+const Chat = require('../models/chat');
+const uploadcloudinary=require('../middleware/cloudinary');
 passport.use('owner-local',new localStrategy(Owner.authenticate()));
 passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
@@ -43,7 +48,8 @@ io.on('connection',socket =>{
     
 
     // io.emit('receive-message',message)
-    io.emit('receive-message',messag);
+    io.emit(sendername+receivername,messag);
+    io.emit(receivername+sendername,messag);
     socket.on('disconnect', () => {
       console.log('User disconnected');
     });
@@ -55,20 +61,24 @@ io.on('connection',socket =>{
 router.get('/', function(req, res, next) {
   res.send({message:'hi'});
 });
-router.post("/ownerregister",upload.single("file"),function(req,res,next){
+router.post("/ownerregister",upload.single("file"),async function(req,res,next){
 
+
+const hospimage=req.file.path;
+const hospitalimage= await uploadcloudinary(hospimage);
   const ownerdata=new Owner({
     username: req.body.username,
     email: req.body.email,
     hospitalname: req.body.hospitalname,
-    image:req.file.filename,
+    image:hospitalimage.url,
 
   })
   
   Owner.register(ownerdata,req.body.password).then(function(registereduser){
     passport.authenticate("owner-local")(req,res,function(){
       
-      res.status(200).send("success");
+      res.status(200).send({message:"success",
+    hospitalimage:hospitalimage.url});
     })
   })
 
@@ -343,6 +353,95 @@ router.get("/performance",async(req,res,next)=>{
     const hosp=await Owner.find({});
     res.send(hosp);
   });
+ 
+
+/**
+ * Module dependencies.
+ */
+
+
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+//  var port = normalizePort(process.env.PORT || '3000');
+// // app.set('port', port);
+
+// /**
+//  * Create HTTP server.
+//  */
+
+// var server = http.createServer(app);
+
+// /**
+//  * Listen on provided port, on all network interfaces.
+//  */
+
+// server.listen(port);
+// server.on('error', onError);
+// server.on('listening', onListening);
+
+// /**
+//  * Normalize a port into a number, string, or false.
+//  */
+
+// function normalizePort(val) {
+//   var port = parseInt(val, 10);
+
+//   if (isNaN(port)) {
+//     // named pipe
+//     return val;
+//   }
+
+//   if (port >= 0) {
+//     // port number
+//     return port;
+//   }
+
+//   return false;
+// }
+
+// /**
+//  * Event listener for HTTP server "error" event.
+//  */
+
+// function onError(error) {
+//   if (error.syscall !== 'listen') {
+//     throw error;
+//   }
+
+//   var bind = typeof port === 'string'
+//     ? 'Pipe ' + port
+//     : 'Port ' + port;
+
+//   // handle specific listen errors with friendly messages
+//   switch (error.code) {
+//     case 'EACCES':
+//       console.error(bind + ' requires elevated privileges');
+//       process.exit(1);
+//       break;
+//     case 'EADDRINUSE':
+//       console.error(bind + ' is already in use');
+//       process.exit(1);
+//       break;
+//     default:
+//       throw error;
+//   }
+// }
+
+// /**
+//  * Event listener for HTTP server "listening" event.
+//  */
+
+// function onListening() {
+//   var addr = server.address();
+//   var bind = typeof addr === 'string'
+//     ? 'pipe ' + addr
+//     : 'port ' + addr.port;
+//   debug('Listening on ' + bind);
+// }
+
 
 module.exports = router;
 

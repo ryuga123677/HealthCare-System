@@ -1,6 +1,10 @@
 var createError = require('http-errors');
-const cors=require('cors');
+const cors = require('cors');
 var express = require('express');
+
+const mongoose = require('mongoose');
+
+
 
 const passport = require('passport');
 var path = require('path');
@@ -11,9 +15,9 @@ const expressSessions = require('express-session');
 
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var doctorRouter = require('./routes/doctors');
-var patientRouter = require('./routes/patients');
+var usersRouter = require('./models/users');
+var doctorRouter = require('./models/doctors');
+var patientRouter = require('./models/patients');
 
 var app = express();
 
@@ -22,8 +26,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(expressSessions({
   resave: false,
-  saveUninitialized:false,
-  secret:'hey hey'
+  saveUninitialized: false,
+  secret: 'hey hey'
 }
 ));
 app.use(passport.initialize());
@@ -43,17 +47,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/doctors',doctorRouter);
+app.use('/doctors', doctorRouter);
 app.use('/patients', patientRouter);
-app.use(express.static('public'));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

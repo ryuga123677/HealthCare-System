@@ -24,7 +24,7 @@ export const Owner_Signup = (props) => {
     formData.append('hospitalname', hospitalname);
     formData.append('file', file);
       const response = await axios.post('http://localhost:3000/ownerregister', formData);
-        if(response.data==="success")
+        if(response.data.message==="success")
         {
           navigate('/ownerpage');
 
