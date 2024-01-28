@@ -33,7 +33,7 @@ export const Doctor_signup = (props) => {
   return (
     <><div className="head2"><h1>Welcome, Doctor Register yourself here</h1></div>
     <div className="card">
-    <div className="content">
+    
     <form>
       
       <label>Enter Name</label>
@@ -62,7 +62,7 @@ export const Doctor_signup = (props) => {
     </form>
     <button className="btn" onClick={handleSignup}>Submit</button>
     </div>
-    </div>
+ 
    
     
    

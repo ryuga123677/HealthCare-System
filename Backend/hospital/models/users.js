@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const plm= require("passport-local-mongoose");
 require('dotenv').config();
-mongoose.connect("mongodb+srv://harshitss311:KvqNL11sl7Pr9Akq@cluster0.pfxd2dz.mongodb.net/HospitalDatabase").then(
+mongoose.connect(process.env.MONGO_URI).then(
   () => {
     console.log("connection established");
   }

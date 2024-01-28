@@ -4,8 +4,9 @@
     color: black;
     box-shadow: 2px 2px ;
     
-
-    /* padding: auto; */
+    
+/* 
+    padding: auto; */
     /* margin: 50px 50px; */
 }
 .nav
@@ -32,12 +33,14 @@
     align-items: center;
     justify-content: center;
     justify-items: center;
-    width: 35%;
+    width: 45%;
     height: 30%;
     margin: 0 auto;
+
     margin-top: 5%;
     padding: 2%;
-    border-radius: 15%;
+    padding-right: 13%;
+    border-radius: 15px;
     
     backdrop-filter: blur(10px);
  
@@ -94,10 +97,14 @@ margin:10px 10px 10px 10px;
 .content{
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+     flex-wrap: wrap; 
+     background-color: aliceblue;
     
+
+    
+    /* align-items: center;
+    justify-content: center;
+     */
 }
 .inrow{
     display: flex;
@@ -137,7 +144,7 @@ margin:10px 10px 10px 10px;
     margin: 0 auto;
     margin-top: 5%;
     padding: 2%;
-    border-radius: 1%;
+    border-radius: 15px;
     
     backdrop-filter: blur(10px);
  

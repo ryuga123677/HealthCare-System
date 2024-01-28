@@ -6,7 +6,7 @@ const navigate = useNavigate();
   return (
     <>
     <h1 className='head2'>Doctors Page</h1>
-    <div className='content'>
+    
       <div className='card'>
 
       <button className='btn' onClick={()=>navigate('/patientappoints')}>Appointments</button>
@@ -31,7 +31,6 @@ const navigate = useNavigate();
       </div>
 
   
-    </div>
    
 
     </>

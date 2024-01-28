@@ -88,10 +88,10 @@ export const CurrentlyTreating = () => {
           <li key={index } className='inrow'>
           
             <div>
-            <button className="btn" onClick={()=>assignreport(item.username)}><h2>{item.username}</h2> Tap to assign report</button>
+            <button className="btn4" onClick={()=>assignreport(item.username)}><h2>{item.username}</h2> Tap to assign report</button>
             <button className='btn2' onClick={()=>Treated(item.username)}>Treated</button>
             <button className='btn2' onClick={()=>notTreated(item.username)}>Not-Treated</button>
-            <button className='btn' onClick={()=>navigate( `/chat/${item.username}`)}>Chat with Patient</button>
+            <button className='btn2' onClick={()=>navigate( `/chat/${item.username}`)}>Chat</button>
             </div>
            
             </li>

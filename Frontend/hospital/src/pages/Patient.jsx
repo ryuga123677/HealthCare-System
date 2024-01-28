@@ -11,7 +11,7 @@ export const Patient = () => {
   return (
     <>
     <h1 className='head2'>Patient Page</h1>
-    <div className='content'>
+    <div >
     <div className='card'>
     <div>
         <button className="btn" onClick={()=>{navigate('/doctorlist')}}>Doctors Avaliable</button>

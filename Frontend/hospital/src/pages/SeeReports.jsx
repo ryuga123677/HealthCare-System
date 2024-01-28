@@ -24,7 +24,7 @@ export const SeeReports = () => {
      <div className='head2'><h1>Report</h1></div>
      {loading?(<SpinnerDotted className='loading' />):(
         
-          <div className='content'>
+ 
             <div className='card'>
             <div><h2>Patient Name-{names.username}</h2> </div>
             <div><h2>Disease -{names.disease}</h2></div>
@@ -34,7 +34,7 @@ export const SeeReports = () => {
             </div>
 
 
-          </div>
+         
            
          
     

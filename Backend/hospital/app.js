@@ -1,6 +1,10 @@
+
+
 var createError = require('http-errors');
 const cors = require('cors');
 var express = require('express');
+var app = express();
+
 
 const mongoose = require('mongoose');
 
@@ -19,7 +23,10 @@ var usersRouter = require('./models/users');
 var doctorRouter = require('./models/doctors');
 var patientRouter = require('./models/patients');
 
-var app = express();
+
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

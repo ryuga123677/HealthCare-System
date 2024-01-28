@@ -44,19 +44,19 @@ export const Doctor_List = () => {
   return (<>
     <h1 className='head2'>Doctors Avaliable</h1>
     {loading?(<SpinnerDotted className='loading'/>):(
-      <div >
-        <div >
-        <ol className='content'>
+      <div className='cont'>
+      
+        <ol className='ml-20'>
         {names.map((item,index) => (
           
-          <li key={index }>
+          <li key={index}>
             <div className='inrow'>
-            <button className="btn4" onClick={()=>{assignappoint(item.username),navigate(-1)}}>
+            <button className="btn" onClick={()=>{assignappoint(item.username),navigate(-1)}}>
               
 
               <h2 >{item.username}
               
-              </h2> click to request for appointment <h6>{item.speciality}</h6></button>
+              </h2> click to request for appointment <h6>Domain-{item.speciality}</h6></button>
               
 
               
@@ -67,7 +67,7 @@ export const Doctor_List = () => {
         ))}
       </ol>
         </div>
-      </div>
+    
      
     )
 

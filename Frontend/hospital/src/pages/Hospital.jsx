@@ -31,22 +31,31 @@ export const Hospital = () => {
   return (<>
     <h1 className='head2'>Hospitals</h1>
     {loading ? (<SpinnerDotted className='loading' />) : (
-      <div >
-        <div >
-          <ol className='content'>
+      <div className=''>
+        
+          <ol className="flex mx-20 my-20 flex-wrap gap-10 ">
             {names.map((item, index) => (
 
-              <li key={index} className='card2'>
+              <li key={index} className='flex mx-5 my-5 flex-wrap h-200px w-250px bg-white rounded px-8 py-8 justify-center'>
                 <div>
                   <img className="imgs" src={item.image} height={'200px'} width={'200px'} />
-                  <h2 >{item.hospitalname}
-                  </h2>
+                  <div>
+                  <h2>{item.hospitalname}</h2>
+                  </div>
+               <div><h9>Total Doctors-{item.doctors.length}</h9></div>
+               <div>
+                <h4>  Total Patient Register-{item.patients.length}</h4>
+                 
+             
+               </div>
+                 
+                 
                 </div>
                 </li>
             ))
             }
           </ol>
-        </div>
+    
       </div>
 
     )

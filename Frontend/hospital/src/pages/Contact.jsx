@@ -4,7 +4,7 @@ export const Contact = () => {
   return (
     <>
      <h1 className='head2'>Contact</h1>
-     < div className='content'>
+     
         <div className='card'>
         <a href="https://github.com/ryuga123677"><h2>Github</h2></a>
         <a href="https://www.linkedin.com/in/harshit-vishwakarma-8638a3245 "><h2>LinkedIn</h2></a>
@@ -12,8 +12,7 @@ export const Contact = () => {
         </div>
       
 
-        
-     </div>
+     
     </>
    
 

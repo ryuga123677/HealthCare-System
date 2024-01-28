@@ -30,7 +30,7 @@ export const Performance = () => {
     <>
     <h1 className='head2'>Performance</h1>
     {loading?(<SpinnerDotted className='loading'/>):
-    (<div className='content'><h2 className='card'>{perform}</h2></div>)}
+    (<div><h1 className='card '>{perform}</h1></div>)}
     </>
     
 
