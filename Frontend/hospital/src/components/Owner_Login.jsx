@@ -2,12 +2,13 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './Auth';
 import './pages.css'
 export const Owner_Login = (props) => {
   const [username,setname] = useState('');
 
   const [password,setpassword] = useState('');
- 
+ const auth =useAuth();
   const navigate = useNavigate();
   const handleSignup = async () => {
     try {
@@ -17,7 +18,8 @@ export const Owner_Login = (props) => {
     
       });
         if(response.data==="success")
-        { const ownername=localStorage.setItem('ownername',username);
+        { auth.login(username);
+          const ownername=localStorage.setItem('ownername',username);
           navigate('/ownerpage');
 
         }

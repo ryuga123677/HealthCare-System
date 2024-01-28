@@ -3,8 +3,8 @@ import { useState,useContext,createContext } from 'react'
 const AuthContext=createContext(null)
 export const AuthProvider = ({children}) => {
 const [user,setuser]=useState(null);
-const login=(username)=>{
-    setuser(username);
+const login=(user)=>{
+    setuser(user);
 }
 const logout=()=>{
     setuser(null);

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link} from 'react-router-dom';
-import { useAuth } from './AuthProvider'
+import { useAuth } from './Auth'
 
 
 export const RequireAuth = ({children}) => {

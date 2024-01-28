@@ -32,30 +32,30 @@ export const Hospital = () => {
     <h1 className='head2'>Hospitals</h1>
     {loading ? (<SpinnerDotted className='loading' />) : (
       <div className=''>
-        
-          <ol className="flex mx-20 my-20 flex-wrap gap-10 ">
-            {names.map((item, index) => (
 
-              <li key={index} className='flex mx-5 my-5 flex-wrap h-200px w-250px bg-white rounded px-8 py-8 justify-center'>
+        <ol className="flex mx-20 my-20 flex-wrap gap-10 ">
+          {names.map((item, index) => (
+
+            <li key={index} className='flex mx-5 my-5 flex-wrap h-200px w-250px bg-yellow-50 rounded px-8 py-8 justify-center'>
+              <div>
+                <img className="imgs" src={item.image} height={'200px'} width={'200px'} />
                 <div>
-                  <img className="imgs" src={item.image} height={'200px'} width={'200px'} />
-                  <div>
                   <h2>{item.hospitalname}</h2>
-                  </div>
-               <div><h9>Total Doctors-{item.doctors.length}</h9></div>
-               <div>
-                <h4>  Total Patient Register-{item.patients.length}</h4>
-                 
-             
-               </div>
-                 
-                 
                 </div>
-                </li>
-            ))
-            }
-          </ol>
-    
+                <div>Total Doctors-{item.doctors.length}</div>
+                <div>
+                  <h4>  Total Patient Register-{item.patients.length}</h4>
+
+
+                </div>
+
+
+              </div>
+            </li>
+          ))
+          }
+        </ol>
+
       </div>
 
     )

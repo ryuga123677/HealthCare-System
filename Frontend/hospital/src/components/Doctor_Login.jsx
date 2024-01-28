@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './pages.css'
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "./Auth";
 export const Doctor_Login = (props) => {
   const [username,setname] = useState('');
 
@@ -21,7 +21,7 @@ export const Doctor_Login = (props) => {
       });
         if(response.data==="success")
         {const doctorname=localStorage.setItem('doctorname',username);
-        // auth.login(doctorname);
+         auth.login(username);
           navigate('/doctorpage');
 
         }

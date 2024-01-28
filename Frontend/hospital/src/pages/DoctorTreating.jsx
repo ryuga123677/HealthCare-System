@@ -29,14 +29,14 @@ export const DoctorTreating = () => {
     <>
     <h1 className='head2'>My Doctors</h1>
     <div className='card'>
-        <div className='content'>
+     
     {loading?(<SpinnerDotted className='loading'/>):(
       
             <ol className='cont'>
         {names.map((item,index) => (
           
           <li key={index } className='inrow'>
-            <div className='inrow'>
+            <div className='inrow mx-10'>
            <h2>{index+1}- {item.username}-({item.speciality})</h2> 
           <button className='btn2' onClick={()=>navigate(`/chat/${item.username}`)}>Chat with doctor</button>
             </div>
@@ -50,7 +50,7 @@ export const DoctorTreating = () => {
 
     }
         
-        </div></div>
+        </div>
   
   
     

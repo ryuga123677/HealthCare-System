@@ -2,9 +2,11 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './Auth';
 import './pages.css'
 export const Patient_Login = (props) => {
   const [username,setname] = useState('');
+  const auth=useAuth();
 
   const [password,setpassword] = useState('');
   const [hospitalname,sethospitalname] = useState('');
@@ -19,7 +21,7 @@ export const Patient_Login = (props) => {
     hospitalname,
       });
         if(response.data==="success")
-        {
+        {auth.login(username);
           localStorage.setItem('hospitalname',hospitalname);
           localStorage.setItem('patientname',username);
           
