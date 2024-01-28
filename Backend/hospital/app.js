@@ -5,6 +5,10 @@ const cors = require('cors');
 var express = require('express');
 var app = express();
 
+var port = process.env.PORT || '3000';
+
+app.set('port', port);
+
 
 const mongoose = require('mongoose');
 
@@ -72,5 +76,9 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+app.listen(port,()=>{
+  console.log(`listening on port ${port}`);
+});
+
 
 module.exports = app;

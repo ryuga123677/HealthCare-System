@@ -1,8 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var debug = require('debug')('hospital:server');
-
-
 const Owner = require("../models/users");
 const passport = require('passport');
 const upload = require("../middleware/multer");
