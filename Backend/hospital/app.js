@@ -1,5 +1,4 @@
 
-
 var createError = require('http-errors');
 const cors = require('cors');
 var express = require('express');
@@ -8,12 +7,7 @@ var app = express();
 var port = process.env.PORT || '3000';
 
 app.set('port', port);
-
-
 const mongoose = require('mongoose');
-
-
-
 const passport = require('passport');
 var path = require('path');
 
@@ -27,14 +21,6 @@ var usersRouter = require('./models/users');
 var doctorRouter = require('./models/doctors');
 var patientRouter = require('./models/patients');
 
-
-
-
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 app.use(expressSessions({
   resave: false,
   saveUninitialized: false,

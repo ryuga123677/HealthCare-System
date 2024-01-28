@@ -41,10 +41,6 @@ io.on('connection', socket => {
     const { sendername, receivername, message } = messag;
     const chat = new Chat({ sendername, receivername, message });
     await chat.save();
-
-
-
-    // io.emit('receive-message',message)
     io.emit(sendername + receivername, messag);
     io.emit(receivername + sendername, messag);
     socket.on('disconnect', () => {
@@ -60,27 +56,30 @@ router.get('/', function (req, res, next) {
 });
 router.post("/ownerregister", upload.single("file"), async function (req, res, next) {
 
+  try {
 
-  const hospimage = req.file.path;
-  const hospitalimage = await uploadcloudinary(hospimage);
-  const ownerdata = new Owner({
-    username: req.body.username,
-    email: req.body.email,
-    hospitalname: req.body.hospitalname,
-    image: hospitalimage.url,
-
-  })
-
-  Owner.register(ownerdata, req.body.password).then(function (registereduser) {
-    passport.authenticate("owner-local")(req, res, function () {
-
-      res.status(200).send({
-        message: "success",
-        hospitalimage: hospitalimage.url
-      });
+    const hospimage = req.file.path;
+    const hospitalimage = await uploadcloudinary(hospimage);
+    const ownerdata = new Owner({
+      username: req.body.username,
+      email: req.body.email,
+      hospitalname: req.body.hospitalname,
+      image: hospitalimage.url,
     })
-  })
 
+    Owner.register(ownerdata, req.body.password).then(function (registereduser) {
+      passport.authenticate("owner-local")(req, res, function () {
+
+        res.status(200).send({
+          message: "success",
+          hospitalimage: hospitalimage.url
+        });
+      })
+    })
+
+  } catch (error) {
+    res.status(500).send({ message: "something went wrong" });
+  }
 });
 router.post("/ownerlogin", passport.authenticate("owner-local", {
 
@@ -93,175 +92,199 @@ router.get("/doctorlistowner", async (req, res, next) => {
   const name = req.query.search;
   const user = await Owner.findOne({ username: name }).populate("doctors");
   if (!user) {
-    res.send("no doctors");
+    res.status(404).send("no doctors with username found");
   }
   else {
-    res.send(user.doctors);
+    res.status(200).send(user.doctors);
   }
-  console.log(user);
-
-
 });
 router.delete("/removedoctor", async (req, res, next) => {
 
   const doc = await Doctor.findOne({ username: req.query.doctor });
   const owner = await Owner.findOne({ username: req.query.owner });
-
-  owner.doctors.splice(doc._id, 1);
-  const deleteddoc = await Doctor.findOneAndDelete({ username: req.query.doctor });
+  if (doc && owner) {
+    owner.doctors.splice(doc._id, 1);
+    const deleteddoc = await Doctor.findOneAndDelete({ username: req.query.doctor });
+  }
   if (deleteddoc) {
-    res.send("success");
+    res.status(200).send("success");
   }
   else {
     res.send("failure");
   }
-
-
-
-
-
-
-
 });
 
 
 router.post('/doctorregister', async function (req, res, next) {
 
-  const user = await Owner.findOne({ hospitalname: req.body.hospitalname });
-  const doct = new Doctor({
-    username: req.body.username,
-    email: req.body.email,
+  try {
+    const user = await Owner.findOne({ hospitalname: req.body.hospitalname });
+    const doct = new Doctor({
+      username: req.body.username,
+      email: req.body.email,
+      speciality: req.body.speciality,
+      hospitalname: user.hospitalname,
+    });
+    Doctor.register(doct, req.body.password,).then(function (registered) {
+      passport.authenticate("doctor-local")(req, res, function () {
+      })
 
-    speciality: req.body.speciality,
-    hospitalname: user.hospitalname,
-  });
-  Doctor.register(doct, req.body.password,).then(function (registered) {
-    passport.authenticate("doctor-local")(req, res, function () {
-      // console.log(res.json);
-      res.send("success");
     })
+    user.doctors.push(doct._id);
+    await user.save();
+    res.status(200).send("success");
 
-  })
-  user.doctors.push(doct._id);
-  await user.save();
-  // res.send("success");
+  } catch (error) {
 
+    res.status(500).send(error.message);
+ }
 });
 router.post("/doctorlogin", passport.authenticate("doctor-local", {
 
   failureFlash: true,
 }), function (req, res) {
-  res.send("success");
+  res.status(200).send("success");
 
 });
 
 router.get("/doctorlist", async (req, res, next) => {
-  const hospitalname = req.query.search;
-  const user = await Owner.findOne({ hospitalname: hospitalname }).populate("doctors");
-  const arr = user.doctors;
-  res.send(arr);
-  console.log(arr);
-
-
+  try {
+    const hospitalname = req.query.search;
+    const user = await Owner.findOne({ hospitalname: hospitalname }).populate("doctors");
+    const arr = user.doctors;
+    res.status(200).send(arr);
+    console.log(arr);
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
 });
 
 router.get("/doctorspatient", async (req, res, next) => {
-  const doctorname = req.query.search;
-  const doct = await Doctor.findOne({ username: doctorname }).populate("currentlytreating");
+  try {
+    const doctorname = req.query.search;
+    const doct = await Doctor.findOne({ username: doctorname }).populate("currentlytreating");
 
-  res.send(doct.currentlytreating);
-
-
-
+    res.status(200).send(doct.currentlytreating);
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
 });
 
 router.get("/appointment", async (req, res, next) => {
-  const patient = await Patient.findOne({ username: req.query.param2 });
-  const doctor = await Doctor.findOne({ username: req.query.param1 });
+  try {
+    const patient = await Patient.findOne({ username: req.query.param2 });
+    const doctor = await Doctor.findOne({ username: req.query.param1 });
 
-  doctor.appointments.push(patient._id);
-  await doctor.save();
-  res.send("success");
+    doctor.appointments.push(patient._id);
+    await doctor.save();
+    res.status(200).send("success");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 router.post("/appointmentfix", async (req, res, next) => {
-  const doctor = await Doctor.findOne({ username: req.body.username });
-  const patient = await Patient.findOne({ username: req.body.patientname });
-  doctor.currentlytreating.push(patient._id);
-  await doctor.save();
-  patient.doctortreating.push(doctor._id);
-  await patient.save();
+  try {
+    const doctor = await Doctor.findOne({ username: req.body.username });
+    const patient = await Patient.findOne({ username: req.body.patientname });
+    doctor.currentlytreating.push(patient._id);
+    await doctor.save();
+    patient.doctortreating.push(doctor._id);
+    await patient.save();
 
-  doctor.appointments.splice(patient._id, 1);
-  await doctor.save();
-  res.send("success");
+    doctor.appointments.splice(patient._id, 1);
+    await doctor.save();
+    res.status(200).send("success");
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
 });
 router.get("/appointmentdecline", async (req, res, next) => {
-  const doctor = await Doctor.findOne({ username: req.query.doctorname });
-  const patient = await Patient.findOne({ username: req.query.patientname });
-  doctor.appointments.splice(patient._id, 1);
-  await doctor.save();
-  res.send("success");
+  try {
+    const doctor = await Doctor.findOne({ username: req.query.doctorname });
+    const patient = await Patient.findOne({ username: req.query.patientname });
+    doctor.appointments.splice(patient._id, 1);
+    await doctor.save();
+    res.status(200).send("success");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 router.get("/doctortreating", async (req, res, next) => {
 
-  const patient = await Patient.findOne({ username: req.query.search }).populate("doctortreating");
-
-
-  res.send(patient.doctortreating);
+  try {
+    const patient = await Patient.findOne({ username: req.query.search }).populate("doctortreating");
+    res.status(200).send(patient.doctortreating);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
 router.post("/assignreport", async (req, res, next) => {
 
-  const doctors = await Doctor.findOne({ username: req.body.doctorname });
+  try {
+    const doctors = await Doctor.findOne({ username: req.body.doctorname });
 
-  const patient = await Patient.findOne({ username: req.body.username });
-  const report = await Report.create({
-    username: req.body.username,
-    disease: req.body.disease,
-    symptoms: req.body.symptoms,
-    medicines: req.body.medicines,
-    diet: req.body.diet,
-    doctor: doctors._id,
-    patient: patient._id,
+    const patient = await Patient.findOne({ username: req.body.username });
+    const report = await Report.create({
+      username: req.body.username,
+      disease: req.body.disease,
+      symptoms: req.body.symptoms,
+      medicines: req.body.medicines,
+      diet: req.body.diet,
+      doctor: doctors._id,
+      patient: patient._id,
 
-  });
-  doctors.patientreports.push(report._id);
-  await doctors.save();
-  patient.report = report._id;
-  await patient.save();
+    });
+    doctors.patientreports.push(report._id);
+    await doctors.save();
+    patient.report = report._id;
+    await patient.save();
+    res.status(200).send("success");
+  } catch (error) {
 
 
-
-
-  res.send("success");
+    res.status(400).send(error.message);
+  }
 });
 router.get("/patienttreated", async (req, res, next) => {
-  const doctor = await Doctor.findOne({ username: req.query.search }).populate("patienttreated");
+  try {
+    const doctor = await Doctor.findOne({ username: req.query.search }).populate("patienttreated");
 
-  {
-    res.send(doctor.patienttreated);
+    {
+      res.status(200).send(doctor.patienttreated);
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
   }
-
 
 });
 router.post("/treated", async (req, res, next) => {
-  const doctor = await Doctor.findOne({ username: req.body.doctorname });
-  const patient = await Patient.findOne({ username: req.body.patientname });
-  doctor.patienttreated.push(patient._id);
-  doctor.currentlytreating.splice(patient._id, 1);
-  patient.doctortreating.splice(doctor._id, 1);
+  try {
+    const doctor = await Doctor.findOne({ username: req.body.doctorname });
+    const patient = await Patient.findOne({ username: req.body.patientname });
+    doctor.patienttreated.push(patient._id);
+    doctor.currentlytreating.splice(patient._id, 1);
+    patient.doctortreating.splice(doctor._id, 1);
 
-  await doctor.save();
-  await patient.save();
-  res.send("success");
+    await doctor.save();
+    await patient.save();
+    res.status(200).send("success");
 
+
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
 router.post("/nottreated", async (req, res, next) => {
-  const doctor = await Doctor.findOne({ username: req.body.doctorname });
-  const patient = await Patient.findOne({ username: req.body.patientname });
-  doctor.died.push(patient._id);
-  doctor.currentlytreating.splice(patient._id, 1);
-  await doctor.save();
-  res.send("success");
+  try {
+    const doctor = await Doctor.findOne({ username: req.body.doctorname });
+    const patient = await Patient.findOne({ username: req.body.patientname });
+    doctor.died.push(patient._id);
+    doctor.currentlytreating.splice(patient._id, 1);
+    await doctor.save();
+    res.status(200).send("success");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 
 });
 router.get("/performance", async (req, res, next) => {
@@ -269,55 +292,66 @@ router.get("/performance", async (req, res, next) => {
   const life = doctor.patienttreated.length;
   const death = doctor.died.length;
   if (death == 0) {
-    let x = ((life * 100)).toString();
+    let x = ((life)).toString();
     console.log(x);
     res.send(x);
   }
   else {
-    let x = (((life / death) * 100)).toString();
+    let x = (((life / death))).toString();
     console.log(x);
     res.send(x);
   }
-
-
-
 });
 router.get("/patientappoints", async (req, res, next) => {
-  const patient = await Doctor.findOne({ username: req.query.param }).populate("appointments");
+  try {
+    const patient = await Doctor.findOne({ username: req.query.param }).populate("appointments");
 
-  res.send(patient.appointments);
+    res.status(200).send(patient.appointments);
 
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 
 });
 router.get("/died", async (req, res, next) => {
-  const patient = await Doctor.findOne({ username: req.query.search }).populate("died");
+  try {
+    const patient = await Doctor.findOne({ username: req.query.search }).populate("died");
 
-  res.send(patient.died);
+    res.status(200).send(patient.died);
 
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 
 })
 
 
 router.post('/patientregister', async function (req, res, next) {
 
-  const user = await Owner.findOne({ hospitalname: req.body.hospitalname });
-  const pet = new Patient({
-    username: req.body.username,
-    email: req.body.email,
-    hospitalname: user.hospitalname,
+  try {
+    const user = await Owner.findOne({ hospitalname: req.body.hospitalname });
+    const pet = new Patient({
+      username: req.body.username,
+      email: req.body.email,
+      hospitalname: user.hospitalname,
 
-    age: req.body.age,
+      age: req.body.age,
 
-  });
-  Patient.register(pet, req.body.password).then(function (registered) {
-    passport.authenticate("patient-local")(req, res, function () {
+    });
+    Patient.register(pet, req.body.password).then(function (registered) {
+      passport.authenticate("patient-local")(req, res, function () {
 
-      res.send("success");
-    })
+        res.status(200).send("success");
+      })
 
-  });
-  user.patients.push(pet._id);
-  await user.save();
+    });
+    user.patients.push(pet._id);
+    await user.save();
+  } catch (error) {
+
+    res.status(400).send(error.message);
+
+  }
 
 
 });
@@ -329,29 +363,42 @@ router.post("/patientlogin", passport.authenticate("patient-local", {
 
 });
 router.get("/seereports", async (req, res, next) => {
-  const patient = await Patient.findOne({ username: req.query.name }).populate("report");
+  try {
+    const patient = await Patient.findOne({ username: req.query.name }).populate("report");
 
-  res.send(patient.report);
+    res.status(200).send(patient.report);
 
+  } catch (error) {
+
+    res.status(400).send(error.message);
+  }
 
 });
 router.get("/message", async (req, res, next) => {
-  const me = await Chat.find({
-    sendername: req.query.sendername,
-    receivername: req.query.receivername,
-  }).sort({ timestamp: 1 });
-  const you = await Chat.find({
-    sendername: req.query.receivername,
-    receivername: req.query.sendername,
-  }).sort({ timestamp: 1 });
-  res.send({
-    "me": me,
-    "you": you
-  });
+  try {
+    const me = await Chat.find({
+      sendername: req.query.sendername,
+      receivername: req.query.receivername,
+    }).sort({ timestamp: 1 });
+    const you = await Chat.find({
+      sendername: req.query.receivername,
+      receivername: req.query.sendername,
+    }).sort({ timestamp: 1 });
+    res.status(200).send({
+      "me": me,
+      "you": you
+    });
+  } catch (error) {
+    res.status(500);
+  }
 });
 router.get("/hospitals", async (req, res, next) => {
-  const hosp = await Owner.find({});
-  res.send(hosp);
+  try {
+    const hosp = await Owner.find({});
+    res.status(200).send(hosp);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 });
 
 
