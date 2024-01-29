@@ -14,6 +14,7 @@ passport.use('doctor-local', new localStrategy(Doctor.authenticate()));
 passport.use('patient-local', new localStrategy(Patient.authenticate()));
 
 var BASE_URL = process.env.BASE_URL;
+var field;
 
 const io = require('socket.io')(process.env.PORT2, {
   cors: {
@@ -54,6 +55,8 @@ io.on('connection', socket => {
 router.get('/', function (req, res, next) {
   res.send({ message: 'hi' });
 });
+
+
 router.post("/ownerregister", upload.single("file"), async function (req, res, next) {
 
   try {
@@ -85,6 +88,7 @@ router.post("/ownerlogin", passport.authenticate("owner-local", {
 
   failureFlash: true,
 }), function (req, res) {
+  
   res.send("success");
 
 });
@@ -143,6 +147,7 @@ router.post("/doctorlogin", passport.authenticate("doctor-local", {
 
   failureFlash: true,
 }), function (req, res) {
+  
   res.status(200).send("success");
 
 });
@@ -248,7 +253,7 @@ router.post("/assignreport", async (req, res, next) => {
 router.get("/patienttreated", async (req, res, next) => {
   try {
     const doctor = await Doctor.findOne({ username: req.query.search }).populate("patienttreated");
-
+console.log(req.session.user);
     {
       res.status(200).send(doctor.patienttreated);
     }
@@ -400,6 +405,10 @@ router.get("/hospitals", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
+function isLoggedIn(req,res,next){
+  if(req.isAuthenticated()) return next();
+  res.send('not login');
+}
 
 
 module.exports = router;

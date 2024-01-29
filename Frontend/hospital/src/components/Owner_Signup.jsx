@@ -26,7 +26,7 @@ export const Owner_Signup = (props) => {
       const response = await axios.post('http://localhost:3000/ownerregister', formData);
         if(response.data.message==="success")
         {
-          navigate('/ownerpage');
+          navigate('/ownerlogin');
 
         }
         else

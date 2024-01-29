@@ -36,7 +36,7 @@ export const Hospital = () => {
         <ol className="flex mx-20 my-20 flex-wrap gap-10 ">
           {names.map((item, index) => (
 
-            <li key={index} className='flex mx-5 my-5 flex-wrap h-200px w-250px bg-yellow-50 rounded px-8 py-8 justify-center'>
+            <li key={index} className='flex mx-5 my-5 flex-wrap h-200px w-250px bg-green-100 rounded px-8 py-8 justify-center'>
               <div>
                 <img className="imgs" src={item.image} height={'200px'} width={'200px'} />
                 <div>

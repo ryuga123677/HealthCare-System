@@ -24,7 +24,11 @@ var patientRouter = require('./models/patients');
 app.use(expressSessions({
   resave: false,
   saveUninitialized: false,
-  secret: 'hey hey'
+  secret: 'CreatedByHarshitKumarVishwakarma',
+  cookie: {
+  
+    maxAge:6*1000
+  }
 }
 ));
 app.use(passport.initialize());

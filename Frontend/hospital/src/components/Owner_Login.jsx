@@ -18,8 +18,9 @@ export const Owner_Login = (props) => {
     
       });
         if(response.data==="success")
-        { auth.login(username);
+        { //auth.login(username);
           const ownername=localStorage.setItem('ownername',username);
+          const field=localStorage.setItem('field','owner');
           navigate('/ownerpage');
 
         }

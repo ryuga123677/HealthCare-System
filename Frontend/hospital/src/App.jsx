@@ -35,7 +35,7 @@ function App() {
 
   return (
     <>
-    <AuthProvider>
+    {/* <AuthProvider> */}
     <Navbar />
         <Routes>
           <Route path='/' element={<Main_Signp_page/>} />
@@ -46,24 +46,24 @@ function App() {
       <Route path='ownerlogin'  element={<Owner_Login/>}/>
       <Route path='doctorlogin'  element={<Doctor_Login/>}/>
       <Route path='patientlogin'  element={<Patient_Login/>}/>
-      <Route path='doctorpage'  element={<RequireAuth><Doctor/></RequireAuth>}/>
-      <Route path='patientpage'  element={<RequireAuth><Patient/></RequireAuth>}/>
-      <Route path='ownerpage'  element={<RequireAuth><Owner/></RequireAuth>}/>
-      <Route path='doctorlist'  element={<RequireAuth><Doctor_List /></RequireAuth>}/>
-      <Route path='patientappoints'  element={<RequireAuth><Doctor_appointment /></RequireAuth>}/>
-      <Route path='currentlytreating'  element={<RequireAuth><CurrentlyTreating /></RequireAuth>}/>
-      <Route path='assignreport/:username'  element={<RequireAuth><Assign_Report /></RequireAuth>}/>
-      <Route path='seereports'  element={<RequireAuth><SeeReports/></RequireAuth>}/>
-      <Route path='patienttreated'  element={<RequireAuth><Patient_Treated /></RequireAuth>}/>
-      <Route path='performance'  element={<RequireAuth><Performance /></RequireAuth>}/>
-      <Route path='died'  element={<RequireAuth><Died /></RequireAuth>}/>
+      <Route path='doctorpage'  element={<Doctor/>}/>
+      <Route path='patientpage'  element={<Patient/>}/>
+      <Route path='ownerpage'  element={<Owner/>}/>
+      <Route path='doctorlist'  element={<Doctor_List />}/>
+      <Route path='patientappoints'  element={<Doctor_appointment />}/>
+      <Route path='currentlytreating'  element={<CurrentlyTreating />}/>
+      <Route path='assignreport/:username'  element={<Assign_Report />}/>
+      <Route path='seereports'  element={<SeeReports/>}/>
+      <Route path='patienttreated'  element={<Patient_Treated />}/>
+      <Route path='performance'  element={<Performance />}/>
+      <Route path='died'  element={<Died />}/>
       <Route path='hospitals'  element={<Hospital/>}/>
       <Route path='contact'  element={<Contact />}/>
       <Route path='chat/:name'  element={<ChatView />}/>
-      <Route path='doctortreating'  element={<RequireAuth><DoctorTreating /></RequireAuth>}/>
+      <Route path='doctortreating'  element={<DoctorTreating />}/>
    
     </Routes>
-    </AuthProvider>
+    {/* </AuthProvider> */}
     </>
   )
 }

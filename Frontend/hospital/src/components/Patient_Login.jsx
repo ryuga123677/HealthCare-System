@@ -21,9 +21,10 @@ export const Patient_Login = (props) => {
     hospitalname,
       });
         if(response.data==="success")
-        {auth.login(username);
+        {//auth.login(username);
           localStorage.setItem('hospitalname',hospitalname);
           localStorage.setItem('patientname',username);
+          const field=localStorage.setItem('field','patient');
           
           navigate('/patientpage');
           

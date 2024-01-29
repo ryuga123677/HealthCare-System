@@ -1,9 +1,30 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import './pages.css'
+import { useEffect } from 'react'
 
 export const Main_Signp_page = () => {
-    const navigate=useNavigate()
+    const navigate=useNavigate();
+    var field='null';
+    useEffect(() =>{
+      field=localStorage.getItem('field','null');
+      if(field=='owner')
+      {
+        navigate('/ownerpage');
+      }
+      if(field=='doctor')
+      {
+        navigate('/doctorpage');
+      }
+      if(field=='patient')
+      {
+        navigate('/patientpage');
+      }
+    },[]);
+ 
+    
+
+   
   return (
   <>
   <div className='info'>
@@ -12,15 +33,15 @@ export const Main_Signp_page = () => {
      
     </div>
   <div>
-  <button className="btn" onClick={()=>navigate('/ownerregister')}>Owner Signup</button>
-  <button className="btn" onClick={()=>navigate('/doctorregister')}>Doctor Signup</button>
-  <button className="btn" onClick={()=>navigate('/patientregister')}>Patient Signup</button>
+  <button className="btn h-20" onClick={()=>navigate('/ownerregister')}>Owner Signup</button>
+  <button className="btn h-20" onClick={()=>navigate('/doctorregister')}>Doctor Signup</button>
+  <button className="btn h-20" onClick={()=>navigate('/patientregister')}>Patient Signup</button>
 
   </div>
   <div>
-  <button className="btn" onClick={()=>navigate('/ownerlogin')}>Owner Login</button>
-  <button className="btn" onClick={()=>navigate('/doctorlogin')}> Doctor Login</button>
-  <button className="btn" onClick={()=>navigate('/patientlogin')}>Patient Login</button>
+  <button className="btn h-20" onClick={()=>navigate('/ownerlogin')}>Owner Login</button>
+  <button className="btn h-20" onClick={()=>navigate('/doctorlogin')}> Doctor Login</button>
+  <button className="btn h-20" onClick={()=>navigate('/patientlogin')}>Patient Login</button>
   </div>
   </div>
 

@@ -21,7 +21,8 @@ export const Doctor_Login = (props) => {
       });
         if(response.data==="success")
         {const doctorname=localStorage.setItem('doctorname',username);
-         auth.login(username);
+        const field=localStorage.setItem('field','doctor');
+        //  auth.login(username);
           navigate('/doctorpage');
 
         }

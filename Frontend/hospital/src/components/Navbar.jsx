@@ -8,8 +8,11 @@ export const Navbar = () => {
   const auth=useAuth();
 const navigate=useNavigate();
   const handlelogout=()=>{
-    auth.logout();
+    // auth.logout();
+    localStorage.setItem('field','null');
     navigate('/');
+
+
   }
 
 
@@ -20,7 +23,7 @@ const navigate=useNavigate();
 <Link to='/hospitals'>Hospitals</Link>     
 <Link to='/about'>About</Link>
 <Link to='/contact'>Contact us</Link>
-{auth.user&&(<button onClick={handlelogout} className='btn3'>Logout</button>)
+{(<button onClick={handlelogout} className='btn3'>Logout</button>)
 }
     </nav>
   )
