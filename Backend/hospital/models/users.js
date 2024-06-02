@@ -46,7 +46,9 @@ const userSchema = new mongoose.Schema({
       ref: 'Patient',
     },
   ],
-
+  refreshToken: {
+    type: String
+}
 
 });
 userSchema.plugin(plm);

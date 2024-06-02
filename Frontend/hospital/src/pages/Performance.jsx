@@ -30,7 +30,7 @@ export const Performance = () => {
     <>
     <h1 className='head2'>Performance</h1>
     {loading?(<SpinnerDotted className='loading'/>):
-    (<div><h1 className='card '>{perform}</h1></div>)}
+    (<div className='flex justify-center items-center mt-10'><h1 className=''>Success Rate-{perform*100}%</h1></div>)}
     </>
     
 

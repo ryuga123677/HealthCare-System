@@ -17,7 +17,7 @@ const navigate=useNavigate();
 
 
   return (
-    <nav className='nav'>
+    <nav className='nav text-xl'>
 
 <Link to='/'>Home</Link> 
 <Link to='/hospitals'>Hospitals</Link>     
