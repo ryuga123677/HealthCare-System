@@ -135,7 +135,7 @@ export const CurrentlyTreating = () => {
                     <DoNotDisturbIcon onClick={()=>notTreated(item.username)}/>
                   </IconButton>
                   <IconButton aria-label="comment">
-                    <ChatIcon onClick={()=>navigate(item.username)}/>
+                    <ChatIcon onClick={()=>navigate(`/chat/${item.username}`)}/>
                   </IconButton>
                   </Box>
                 }

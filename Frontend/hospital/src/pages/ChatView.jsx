@@ -64,7 +64,7 @@ const ChatView = () => {
 
         ...prevMessages, data
       ]);
-      console.log("2 use");
+      console.log(messages);
     });
     return () => {
       socket.off(tempname + name);

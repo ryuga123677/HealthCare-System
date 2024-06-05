@@ -1,8 +1,9 @@
 import React from 'react'
 import {Button,createTheme, ThemeProvider} from '@mui/material'
 import { useNavigate } from 'react-router-dom';
-
-
+import axios from 'axios';
+import { useEffect } from 'react';
+axios.defaults.withCredentials=true;
 export const Patient = () => {
   const navigate = useNavigate()
   const theme = createTheme({
@@ -12,6 +13,23 @@ export const Patient = () => {
       },
     },
   });
+  const islogin = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/ispatientlogin");
+      console.log(response.data);
+      if (response.data === "no refreshtoken") {
+        
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error fetching login status:', error);
+      // Handle error (e.g., show error message to the user)
+    }
+  }
+  
+  useEffect(() => {
+    islogin();
+  }, []);
 
 
   return (

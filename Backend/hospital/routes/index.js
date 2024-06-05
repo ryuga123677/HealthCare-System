@@ -9,6 +9,7 @@ const Patient = require("../models/patients");
 const Report = require("../models/reports");
 const Chat = require("../models/chat");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const uploadcloudinary = require("../middleware/cloudinary");
 passport.use("owner-local", new localStrategy(Owner.authenticate()));
 passport.use("doctor-local", new localStrategy(Doctor.authenticate()));
@@ -55,6 +56,98 @@ io.on("connection", (socket) => {
     });
   });
 });
+const verifyuserdoctor = async (req, res, next) => {
+  const accesstoken = req.cookies.accessToken;
+  if (!accesstoken) {
+    if (renewtokendoctor(req, res)) {
+      next();
+    }
+  } else {
+    jwt.verify(accesstoken, "access-token-doctor", (err, decoded) => {
+      if (err) {
+        return res.json("invalid access token");
+      } else {
+        req.username = decoded.username;
+        next();
+      }
+    });
+  }
+};
+const renewtokendoctor = (req, res) => {
+  const refreshtoken = req.cookies.refreshToken;
+  
+  if (!refreshtoken) {
+     res.json("no refreshtoken");
+     return false;
+  } else {
+    jwt.verify(refreshtoken, "refresh-token-doctor", (err, decoded) => {
+      if (err) {
+         res.json("invalid refresh token");
+         return false;
+      } else {
+        const accessToken = jwt.sign(
+          { username: decoded.username },
+          "access-token-doctor",
+          { expiresIn: "1m" }
+        );
+
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          maxAge: 60000,
+        });
+      
+      }
+    });
+    return true;
+  }
+
+};
+const verifyuserpatient = async (req, res, next) => {
+  const accesstoken = req.cookies.accessToken;
+  if (!accesstoken) {
+    if (renewtokenpatient(req, res)) {
+      next();
+    }
+  } else {
+    jwt.verify(accesstoken, "access-token-patient", (err, decoded) => {
+      if (err) {
+        return res.json("invalid access token");
+      } else {
+        req.username = decoded.username;
+        next();
+      }
+    });
+  }
+};
+const renewtokenpatient = (req, res) => {
+  const refreshtoken = req.cookies.refreshToken;
+  
+  if (!refreshtoken) {
+     res.json("no refreshtoken");
+     return false;
+  } else {
+    jwt.verify(refreshtoken, "refresh-token-patient", (err, decoded) => {
+      if (err) {
+         res.json("invalid refresh token");
+         return false;
+      } else {
+        const accessToken = jwt.sign(
+          { username: decoded.username },
+          "access-token-patient",
+          { expiresIn: "1m" }
+        );
+
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          maxAge: 60000,
+        });
+      
+      }
+    });
+    return true;
+  }
+
+};
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -67,52 +160,113 @@ router.post(
   async function (req, res, next) {
     try {
       const hospimage = req.file.path;
+
+      const registereduser = await Owner.findOne({
+        email: req.body.email,
+        password: req.body.password,
+      });
+      if (registereduser) {
+        return res.status(400).send("user already registerd");
+      }
       const hospitalimage = await uploadcloudinary(hospimage);
       const ownerdata = new Owner({
         username: req.body.username,
         email: req.body.email,
+        password: req.body.password,
         hospitalname: req.body.hospitalname,
         image: hospitalimage.url,
       });
-
-      Owner.register(ownerdata, req.body.password).then(function (
-        registereduser
-      ) {
-        passport.authenticate("owner-local")(req, res, function () {
-          res.status(200).send({
-            message: "success",
-            hospitalimage: hospitalimage.url,
-          });
-        });
-      });
+      await ownerdata.save();
+      res.status(200).send({ message: "success" });
     } catch (error) {
       res.status(500).send({ message: "something went wrong" });
     }
   }
 );
-router.post(
-  "/ownerlogin",
-  passport.authenticate("owner-local", {
-    failureFlash: true,
-  }),
-  async function (req, res) {
-    //   const {accessToken,refreshToken}=await generateAccessAndRefereshTokens('Owner',owner._id);
-    // const options ={
-    //   httpOnly:true,
-    //   secure:true,
-    // }
-    // res.status(200).cookie("accessToken",accessToken,options).cookie("refreshToken",refreshToken,options).send("success");
-    res.status(200).send("success");
+router.post("/ownerlogin", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await Owner.findOne({ username: username, password: password });
+  if (!user) {
+    return res.status(400).send("user not found");
   }
-);
-router.get("/doctorlistowner", async (req, res, next) => {
-  const name = req.query.search;
+
+  const accessToken = jwt.sign({ username: username }, "access-token", {
+    expiresIn: "1m",
+  });
+  const refreshToken = jwt.sign({ username: username }, "refresh-token", {
+    expiresIn: "10m",
+  });
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, {
+      httpOnly: true,
+      maxAge: 60000,
+    })
+    .cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 600000,
+    })
+    .send("success");
+});
+const verifyuser = async (req, res, next) => {
+  const accesstoken = req.cookies.accessToken;
+  if (!accesstoken) {
+    if (renewtoken(req, res)) {
+      next();
+    }
+  } else {
+    jwt.verify(accesstoken, "access-token", (err, decoded) => {
+      if (err) {
+        return res.json("invalid access token");
+      } else {
+        req.username = decoded.username;
+        next();
+      }
+    });
+  }
+};
+const renewtoken = (req, res) => {
+  const refreshtoken = req.cookies.refreshToken;
+  
+  if (!refreshtoken) {
+    res.json("no refreshtoken");
+    return false;
+  } else {
+    jwt.verify(refreshtoken, "refresh-token", (err, decoded) => {
+      if (err) {
+        res.json("invalid refresh token");
+        return false;
+      } else {
+        const accessToken = jwt.sign(
+          { username: decoded.username },
+          "access-token",
+          { expiresIn: "1m" }
+        );
+
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          maxAge: 60000,
+        });
+        
+      }
+    });
+    return true;
+  }
+  
+};
+router.get("/isownerlogin", verifyuser, async (req, res) => {
+  return res.status(200).send("success");
+});
+router.get("/doctorlistowner", verifyuser, async (req, res, next) => {
+  const name = req.username;
   const user = await Owner.findOne({ username: name }).populate("doctors");
   if (!user) {
-    res.status(404).send("no doctors with username found");
+    return res.status(404).send("no doctors with username found");
   } else {
-    res.status(200).send(user.doctors);
+    return res.status(200).send(user.doctors);
   }
+  return res.status(200).send("success");
 });
 router.delete("/removedoctor", async (req, res, next) => {
   const doc = await Doctor.findOne({ username: req.query.doctor });
@@ -120,7 +274,7 @@ router.delete("/removedoctor", async (req, res, next) => {
   var deleteddoc;
   if (doc && owner) {
     owner.doctors.splice(doc._id, 1);
-     deleteddoc = await Doctor.findOneAndDelete({
+    deleteddoc = await Doctor.findOneAndDelete({
       username: req.query.doctor,
     });
   }
@@ -134,32 +288,67 @@ router.delete("/removedoctor", async (req, res, next) => {
 router.post("/doctorregister", async function (req, res, next) {
   try {
     const user = await Owner.findOne({ hospitalname: req.body.hospitalname });
+    const doctor = await Doctor.findOne({ username: req.body.username });
+    if (doctor) {
+      return res.status(400).send("doctor already exists");
+    }
     const doct = new Doctor({
       username: req.body.username,
       email: req.body.email,
+      password: req.body.password,
       speciality: req.body.speciality,
       hospitalname: user.hospitalname,
     });
-    Doctor.register(doct, req.body.password).then(function (registered) {
-      passport.authenticate("doctor-local")(req, res, function () {});
-    });
+    await doct.save();
     user.doctors.push(doct._id);
     await user.save();
-    res.status(200).send("success");
+    return res.status(200).send("success");
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 router.post(
   "/doctorlogin",
-  passport.authenticate("doctor-local", {
-    failureFlash: true,
-  }),
-  function (req, res) {
-    res.status(200).send("success");
+
+  async (req, res) => {
+    const { username, password } = req.body;
+    const user = await Doctor.findOne({
+      username: username,
+      password: password,
+    });
+    if (!user) {
+      return res.status(400).send("user not found");
+    }
+
+    const accessToken = jwt.sign(
+      { username: username },
+      "access-token-doctor",
+      { expiresIn: "1m" }
+    );
+    const refreshToken = jwt.sign(
+      { username: username },
+      "refresh-token-doctor",
+      { expiresIn: "10m" }
+    );
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        maxAge: 60000,
+        
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 600000,
+  
+      })
+      .send("success");
   }
 );
-
+router.get("/isdoctorlogin", verifyuserdoctor, async (req, res) => {
+  return res.status(200).send("success");
+});
 router.get("/doctorlist", async (req, res, next) => {
   try {
     const hospitalname = req.query.search;
@@ -174,7 +363,7 @@ router.get("/doctorlist", async (req, res, next) => {
   }
 });
 
-router.get("/doctorspatient", async (req, res, next) => {
+router.get("/doctorspatient", verifyuserdoctor,async (req, res, next) => {
   try {
     const doctorname = req.query.search;
     const doct = await Doctor.findOne({ username: doctorname }).populate(
@@ -187,7 +376,7 @@ router.get("/doctorspatient", async (req, res, next) => {
   }
 });
 
-router.get("/appointment", async (req, res, next) => {
+router.get("/appointment", verifyuserdoctor,async (req, res, next) => {
   try {
     const patient = await Patient.findOne({ username: req.query.param2 });
     const doctor = await Doctor.findOne({ username: req.query.param1 });
@@ -199,7 +388,7 @@ router.get("/appointment", async (req, res, next) => {
     res.status(500).send(error.message);
   }
 });
-router.post("/appointmentfix", async (req, res, next) => {
+router.post("/appointmentfix",verifyuserdoctor, async (req, res, next) => {
   try {
     const doctor = await Doctor.findOne({ username: req.body.username });
     const patient = await Patient.findOne({ username: req.body.patientname });
@@ -236,7 +425,7 @@ router.get("/doctortreating", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
-router.post("/assignreport", async (req, res, next) => {
+router.post("/assignreport",verifyuserdoctor, async (req, res, next) => {
   try {
     const doctors = await Doctor.findOne({ username: req.body.doctorname });
 
@@ -259,7 +448,7 @@ router.post("/assignreport", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
-router.get("/patienttreated", async (req, res, next) => {
+router.get("/patienttreated",verifyuserdoctor, async (req, res, next) => {
   try {
     const doctor = await Doctor.findOne({
       username: req.query.search,
@@ -272,7 +461,7 @@ router.get("/patienttreated", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
-router.post("/treated", async (req, res, next) => {
+router.post("/treated",verifyuserdoctor, async (req, res, next) => {
   try {
     const doctor = await Doctor.findOne({ username: req.body.doctorname });
     const patient = await Patient.findOne({ username: req.body.patientname });
@@ -287,7 +476,7 @@ router.post("/treated", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
-router.post("/nottreated", async (req, res, next) => {
+router.post("/nottreated",verifyuserdoctor, async (req, res, next) => {
   try {
     const doctor = await Doctor.findOne({ username: req.body.doctorname });
     const patient = await Patient.findOne({ username: req.body.patientname });
@@ -299,7 +488,7 @@ router.post("/nottreated", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
-router.get("/performance", async (req, res, next) => {
+router.get("/performance",verifyuserdoctor, async (req, res, next) => {
   const doctor = await Doctor.findOne({ username: req.query.search });
   const life = doctor.patienttreated.length;
   const death = doctor.died.length;
@@ -313,18 +502,18 @@ router.get("/performance", async (req, res, next) => {
     res.send(x);
   }
 });
-router.get("/patientappoints", async (req, res, next) => {
+router.get("/patientappoints",verifyuserdoctor, async (req, res, next) => {
   try {
     const patient = await Doctor.findOne({
       username: req.query.param,
     }).populate("appointments");
 
-    res.status(200).send(patient.appointments);
+    return res.status(200).send(patient.appointments);
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
-router.get("/died", async (req, res, next) => {
+router.get("/died",verifyuserdoctor, async (req, res, next) => {
   try {
     const patient = await Doctor.findOne({
       username: req.query.search,
@@ -335,38 +524,61 @@ router.get("/died", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
-
+router.get("/ispatientlogin", verifyuserpatient, async (req, res) => {
+  return res.status(200).send("success");
+});
 router.post("/patientregister", async function (req, res, next) {
   try {
     const user = await Owner.findOne({ hospitalname: req.body.hospitalname });
-    const pet = new Patient({
+    const registeredpatient = await Patient.findOne({ username: req.body.username});
+    if (registeredpatient) {
+      return res.status(400).send("user already registerd");
+    }
+    const patient = new Patient({
       username: req.body.username,
       email: req.body.email,
       hospitalname: user.hospitalname,
-
+      password: req.body.password,
       age: req.body.age,
     });
-    Patient.register(pet, req.body.password).then(function (registered) {
-      passport.authenticate("patient-local")(req, res, function () {
-        res.status(200).send("success");
-      });
-    });
-    user.patients.push(pet._id);
+    await patient.save();
+    user.patients.push(patient._id);
     await user.save();
+    return res.status(200).send("success");
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
 router.post(
   "/patientlogin",
-  passport.authenticate("patient-local", {
-    failureFlash: true,
-  }),
-  function (req, res) {
-    res.send("success");
+  async (req, res) => {
+    const { username, password ,hospitalname} = req.body;
+    const user = await Patient.findOne({ username: username, password: password ,hospitalname:hospitalname});
+    if (!user) {
+      return res.status(400).send("user not found");
+    }
+  
+    const accessToken = jwt.sign({ username: username }, "access-token-patient", {
+      expiresIn: "1m",
+    });
+    const refreshToken = jwt.sign({ username: username }, "refresh-token-patient", {
+      expiresIn: "10m",
+    });
+  
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        maxAge: 60000,
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 600000,
+      })
+      .send("success");
   }
 );
-router.get("/seereports", async (req, res, next) => {
+router.get("/seereports",verifyuserpatient, async (req, res, next) => {
   try {
     const patient = await Patient.findOne({
       username: req.query.name,
@@ -403,26 +615,7 @@ router.get("/hospitals", async (req, res, next) => {
     res.status(400).send(error.message);
   }
 });
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.send("not login");
-}
-const generateAccessAndRefereshTokens = async (model, userId) => {
-  try {
-    const user = await model.findById(userId);
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
 
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
 
-    return { accessToken, refreshToken };
-  } catch (error) {
-    throw new ApiError(
-      500,
-      "Something went wrong while generating referesh and access token"
-    );
-  }
-};
 
 module.exports = router;

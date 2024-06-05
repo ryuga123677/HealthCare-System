@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema({
 
 });
 userSchema.plugin(plm);
+
 const Owner = mongoose.model('Owner', userSchema);
 
 module.exports = Owner;

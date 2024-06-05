@@ -17,6 +17,7 @@ export const Doctor_appointment =() => {
     
 const response=await axios.get(`http://localhost:3000/patientappoints?param=${username}`).then((response) => {
     let arr=response.data;
+    console.log(response.data);
         
           setname(arr);
           setLoading(false);

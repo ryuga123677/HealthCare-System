@@ -13,7 +13,7 @@ export const Doctor_Login = (props) => {
   const auth = useAuth();
   const notify = (message) => toast(message);
   const navigate = useNavigate();
-
+  axios.defaults.withCredentials=true;
   const handleSignup = async () => {
     if (!username || !password) {
       notify('Please fill in all fields');

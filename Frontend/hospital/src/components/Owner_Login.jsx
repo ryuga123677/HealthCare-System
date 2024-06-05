@@ -11,6 +11,7 @@ export const Owner_Login = (props) => {
 
   const [password, setpassword] = useState("");
   const auth = useAuth();
+  const notify = (message) => toast(message);
   const navigate = useNavigate();
   const handleSignup = async () => {
     if (!username || !password) {
@@ -37,7 +38,7 @@ export const Owner_Login = (props) => {
     } catch (error) {
       notify('Error during login user not found: ' + error.message);
     
-      console.error("Error during register:", error.message);
+      console.error("Error during login:", error.message);
     }
   };
   return (

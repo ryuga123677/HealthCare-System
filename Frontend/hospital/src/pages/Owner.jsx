@@ -1,16 +1,23 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { SpinnerDotted } from 'spinners-react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 export const Owner = () => {
   const [names, setname] = useState([]);
   const ownername = localStorage.getItem('ownername', "****");
   const [loading, setLoading] = useState(true);
 
+   const navigate = useNavigate();
+axios.defaults.withCredentials=true;
   const handleSignup = async () => {
 
     const response = await axios.get(`http://localhost:3000/doctorlistowner?search=${ownername}`).then((response) => {
       console.log(response.data);
+      if(response.data=="no refreshtoken")
+        {
+          navigate('/');
+        }
       let arr = response.data;
       setLoading(false);
 
@@ -34,7 +41,7 @@ export const Owner = () => {
     });
   }
   useEffect(() => {
-    handleSignup();
+   // handleSignup();
   }, [])
   return (
     <>

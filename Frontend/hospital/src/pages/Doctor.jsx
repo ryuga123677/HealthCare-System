@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, createTheme, ThemeProvider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios"
 const theme = createTheme({
   palette: {
     primary: {
@@ -9,9 +9,26 @@ const theme = createTheme({
     },
   },
 });
-
+axios.defaults.withCredentials=true;
 export const Doctor = () => {
   const navigate = useNavigate();
+  const islogin = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/isdoctorlogin");
+      console.log(response.data);
+      if (response.data === "no refreshtoken") {
+        
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error fetching login status:', error);
+      // Handle error (e.g., show error message to the user)
+    }
+  }
+  
+  useEffect(() => {
+    islogin();
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <div className="flex flex-col justify-center items-center gap-5 h-[100vh]">

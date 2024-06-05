@@ -37,7 +37,12 @@ passport.serializeUser(doctorRouter.serializeUser());
 passport.deserializeUser(doctorRouter.deserializeUser());
 passport.serializeUser(patientRouter.serializeUser());
 passport.deserializeUser(patientRouter.deserializeUser());
-app.use(cors());
+app.use(cors(
+  {
+    origin: ["http://localhost:5173"],
+    credentials:true
+  }
+));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { Box } from "@mui/material";
 //import CommentIcon from '@mui/icons-material/Comment';
 import IconButton from "@mui/material/IconButton";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -22,7 +23,7 @@ export const Doctor_List = () => {
     const response = await axios
       .get(`http://localhost:3000/doctorlist?search=${hospitalname}`)
       .then((response) => {
-        console.log(response.data);
+
         let arr = response.data;
         setLoading(false);
 
@@ -89,11 +90,13 @@ export const Doctor_List = () => {
                 key={index}
                 disableGutters
                 secondaryAction={
+                  <Box>
                   <IconButton aria-label="comment">
                     <AddCircleOutlineIcon   onClick={() => {
                       assignappoint(item.username), navigate(-1);
                     }}/>
                   </IconButton>
+                  </Box>
                 }
               >
                 <ListItemText
