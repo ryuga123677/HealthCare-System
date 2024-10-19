@@ -40,7 +40,7 @@ export const Hospital = () => {
               <div>
                 <img className="imgs" src={item.image} height={'200px'} width={'200px'} />
                 <div>
-                  <h2 className='text-green-500'>{item.hospitalname}</h2>
+                  <h2 className='text-red-500'>{item.hospitalname}</h2>
                 </div>
                 <div>Total Doctors-{item.doctors.length}</div>
                 <div>

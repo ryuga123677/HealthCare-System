@@ -88,12 +88,12 @@ const renewtokendoctor = (req, res) => {
         const accessToken = jwt.sign(
           { username: decoded.username },
           "access-token-doctor",
-          { expiresIn: "1m" }
+          { expiresIn: "30s" }
         );
 
         res.cookie("accessToken", accessToken, {
-          httpOnly: true,
-          maxAge: 60000,
+          httpOnly: false,
+          maxAge: 30000,
         });
       
       }
@@ -134,12 +134,12 @@ const renewtokenpatient = (req, res) => {
         const accessToken = jwt.sign(
           { username: decoded.username },
           "access-token-patient",
-          { expiresIn: "1m" }
+          { expiresIn: "2h" }
         );
 
         res.cookie("accessToken", accessToken, {
-          httpOnly: true,
-          maxAge: 60000,
+          httpOnly: false,
+          maxAge: 7200000,
         });
       
       }
@@ -191,21 +191,21 @@ router.post("/ownerlogin", async (req, res) => {
   }
 
   const accessToken = jwt.sign({ username: username }, "access-token", {
-    expiresIn: "1m",
+    expiresIn: "2h",
   });
   const refreshToken = jwt.sign({ username: username }, "refresh-token", {
-    expiresIn: "10m",
+    expiresIn: "1d",
   });
 
   return res
     .status(200)
     .cookie("accessToken", accessToken, {
-      httpOnly: true,
-      maxAge: 60000,
+      httpOnly: false,
+      maxAge: 7200000,
     })
     .cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 600000,
+      httpOnly: false,
+      maxAge: 86400000,
     })
     .send("success");
 });
@@ -241,12 +241,12 @@ const renewtoken = (req, res) => {
         const accessToken = jwt.sign(
           { username: decoded.username },
           "access-token",
-          { expiresIn: "1m" }
+          { expiresIn: "2h" }
         );
 
         res.cookie("accessToken", accessToken, {
-          httpOnly: true,
-          maxAge: 60000,
+          httpOnly: false,
+          maxAge: 7200000,
         });
         
       }
@@ -323,24 +323,24 @@ router.post(
     const accessToken = jwt.sign(
       { username: username },
       "access-token-doctor",
-      { expiresIn: "1m" }
+      { expiresIn: "30s" }
     );
     const refreshToken = jwt.sign(
       { username: username },
       "refresh-token-doctor",
-      { expiresIn: "10m" }
+      { expiresIn: "2m" }
     );
 
     return res
       .status(200)
       .cookie("accessToken", accessToken, {
-        httpOnly: true,
-        maxAge: 60000,
+        httpOnly:false,
+        maxAge: 30000,//7200000
         
       })
       .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        maxAge: 600000,
+        httpOnly: false,
+        maxAge: 120000,//86400000
   
       })
       .send("success");
@@ -376,7 +376,7 @@ router.get("/doctorspatient", verifyuserdoctor,async (req, res, next) => {
   }
 });
 
-router.get("/appointment", verifyuserdoctor,async (req, res, next) => {
+router.get("/appointment",async (req, res, next) => {
   try {
     const patient = await Patient.findOne({ username: req.query.param2 });
     const doctor = await Doctor.findOne({ username: req.query.param1 });
@@ -388,7 +388,7 @@ router.get("/appointment", verifyuserdoctor,async (req, res, next) => {
     res.status(500).send(error.message);
   }
 });
-router.post("/appointmentfix",verifyuserdoctor, async (req, res, next) => {
+router.post("/appointmentfix", async (req, res, next) => {
   try {
     const doctor = await Doctor.findOne({ username: req.body.username });
     const patient = await Patient.findOne({ username: req.body.patientname });
@@ -502,7 +502,7 @@ router.get("/performance",verifyuserdoctor, async (req, res, next) => {
     res.send(x);
   }
 });
-router.get("/patientappoints",verifyuserdoctor, async (req, res, next) => {
+router.get("/patientappoints", async (req, res, next) => {
   try {
     const patient = await Doctor.findOne({
       username: req.query.param,
@@ -559,21 +559,21 @@ router.post(
     }
   
     const accessToken = jwt.sign({ username: username }, "access-token-patient", {
-      expiresIn: "1m",
+      expiresIn: "2h",
     });
     const refreshToken = jwt.sign({ username: username }, "refresh-token-patient", {
-      expiresIn: "10m",
+      expiresIn: "1d",
     });
   
     return res
       .status(200)
       .cookie("accessToken", accessToken, {
-        httpOnly: true,
-        maxAge: 60000,
+        httpOnly: false,
+        maxAge: 7200000,
       })
       .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        maxAge: 600000,
+        httpOnly: false,
+        maxAge: 86400000,
       })
       .send("success");
   }
